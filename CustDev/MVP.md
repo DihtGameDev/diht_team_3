@@ -3,6 +3,7 @@
 Технологический стек:
 * Языки HTML, CSS, JS
 * WebStorm
+* Django
 * Figma
 * React
 * GitHub, GitHub Pages
