@@ -25,7 +25,7 @@ public class ButtonController : MonoBehaviour
         
         #region startBuild
         Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
+
         #endregion
     }
 
