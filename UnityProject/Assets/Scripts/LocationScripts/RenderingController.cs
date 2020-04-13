@@ -19,6 +19,7 @@ public class RenderingController : MonoBehaviour
     BoxCollider2D collider;
 
     private float defaultY;
+
     // Start is called before the first frame update
     void Start()
     {

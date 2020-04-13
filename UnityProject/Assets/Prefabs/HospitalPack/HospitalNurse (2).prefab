@@ -169,7 +169,7 @@ MonoBehaviour:
   isMashallVisible: 0
   numerOfObstacles: 0
   numberOfShelters: 0
-  isMarshalOnSafeZoneAndHiden: 0
+  isMarshalOnSafeZone: 0
   distanceToMarshall: 0
   distanceOfViewing: 0
   calmDistanceOfViewing: 0
@@ -450,6 +450,7 @@ MonoBehaviour:
   defaultPosition: {x: 4, y: 4.3}
   speed: 0
   isMarshallVisible: 0
+  isTriggerOnTheLight: 0
   isCalm: 0
   isWandering: 0
   isAnxious: 0
@@ -463,6 +464,7 @@ MonoBehaviour:
   changable_timeOfEasyCalming: 0
   changable_timeOfWandering: 0
   timeOfPatheringAfterDisappear: 0
+  isLookingRight: 0
 --- !u!114 &5906196472231538764
 MonoBehaviour:
   m_ObjectHideFlags: 0

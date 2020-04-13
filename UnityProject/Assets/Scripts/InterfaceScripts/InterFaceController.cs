@@ -54,7 +54,7 @@ public class InterFaceController : MonoBehaviour
     {
         health = healthBar.transform.childCount;
 
-        if (Input.GetKeyDown(KeyCode.Tab) && !loseMenu.activeSelf) {
+        if (Input.GetKeyDown(KeyCode.Escape) && !loseMenu.activeSelf) {
             if (pauseMenu.activeSelf)
             {               
                 BackToGame();
@@ -95,7 +95,7 @@ public class InterFaceController : MonoBehaviour
     public void Pause()
     {   
         pauseMenu.SetActive(true);
-        Cursor.lockState = CursorLockMode.Locked;
+  
         eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(pauseMenu.transform.Find("PauseMenuPanel").gameObject);
         Time.timeScale = 0f;
     }
@@ -103,7 +103,7 @@ public class InterFaceController : MonoBehaviour
     public void BackToGame()
     {
         Time.timeScale = 1f;
-        Cursor.lockState = CursorLockMode.None;
+
         pauseMenu.SetActive(false);
     }
 }

@@ -15,8 +15,8 @@ public class NavigationController : MonoBehaviour
     {
         pathering = GetComponent<AstarPath>();
 
-        periodOfScaning = 2.5f;
-        //StartCoroutine(scaning(periodOfScaning));
+        periodOfScaning = 7f;
+        StartCoroutine(scaning(periodOfScaning));
     }
 
 

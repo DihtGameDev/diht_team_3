@@ -216,6 +216,8 @@ MonoBehaviour:
   fastCrawlSpeed: 0
   speed: 0
   isSitting: 0
+  isShined: 0
+  shinersCounter: 0
 --- !u!61 &17809727
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2145,7 +2147,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1.09
+  m_Intensity: 1.06
   m_LightVolumeOpacity: 0
   m_ApplyToSortingLayers: 590fb2c9
   m_LightCookieSprite: {fileID: 0}
@@ -6666,7 +6668,7 @@ Canvas:
   m_GameObject: {fileID: 5160344076073828017}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 1
@@ -7468,6 +7470,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39e58b8ae8a6af14a900d6fd66c466cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isShine: 1
 --- !u!1 &6802308217942962126
 GameObject:
   m_ObjectHideFlags: 0
@@ -9253,7 +9256,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9196459856624290034}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 1.18, y: 0.89, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -9317,7 +9320,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 2
+  orthographic size: 2.5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2

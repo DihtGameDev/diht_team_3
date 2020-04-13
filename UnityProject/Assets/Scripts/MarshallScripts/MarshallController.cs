@@ -52,6 +52,13 @@ public class MarshallController : MonoBehaviour
     //Colliders
     static private BoxCollider2D collider;
 
+
+    //Shining by Lighter
+
+    public bool isShined;
+
+    public int shinersCounter;
+
     //Animation
 
     private PlayableDirector fader;
@@ -81,8 +88,10 @@ public class MarshallController : MonoBehaviour
         isCaptured = false;
         isChasable = false;
         number_of_rushers = 0;
+        shinersCounter = 0;
 
         isSitting = false;
+        isShined = false;
 
         rightAxis = 0f;
         leftAxis = 0f;
@@ -104,6 +113,15 @@ public class MarshallController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        // LIGHTERS
+        if (shinersCounter > 0)
+        {
+            isShined = true;
+        }
+        else
+        {
+            isShined = false;
+        }
 
         //ENEMIES
         if (number_of_rushers == 0)

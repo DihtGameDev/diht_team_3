@@ -4,11 +4,7 @@ using UnityEngine;
 
 public class DialogeTrigger : MonoBehaviour
 {
-
-    int pointer = 1;
-    public bool isPressedD = false;
-    public bool isPressedA = false;
-
+    
     [SerializeField]
     DialogeController dController;
 
@@ -20,20 +16,18 @@ public class DialogeTrigger : MonoBehaviour
 
         TriggerDialoge();
 
-        StartCoroutine(Display(2.2f));
+        StartCoroutine(Display(1.8f));
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.D) && !isPressedD && dController.pointer == pointer) {
-            pointer++;
-            isPressedD = true;
+        if (Input.GetKeyDown(KeyCode.D) && dController.pointer == 1) {
+
             StartCoroutine(Close(0.1f));
             StartCoroutine(Display(0.6f));
         }
-        if (Input.GetKeyDown(KeyCode.A) && !isPressedA && isPressedD && dController.pointer == pointer) {
-            isPressedA = true;
+        if (Input.GetKeyDown(KeyCode.A) && dController.pointer == 2) {
             StartCoroutine(Close(0.1f));
         }
     }

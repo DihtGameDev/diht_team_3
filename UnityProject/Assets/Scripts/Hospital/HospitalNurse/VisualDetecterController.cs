@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class VisualDetecterController : MonoBehaviour
 {
-    [HideInInspector]
+
+    bool isStartDetecting = false;
+
+    //[HideInInspector]
     public bool isMashallVisible;
 
     [SerializeField]
@@ -14,15 +17,18 @@ public class VisualDetecterController : MonoBehaviour
     private int numberOfShelters;
 
     [SerializeField]
-    private bool isMarshalOnSafeZoneAndHiden; // в некоторой безопасной зоне и за укрытием (в/но стоит)
+    private bool isMarshalOnSafeZone; // в некоторой безопасной зоне и за укрытием (в/но стоит)
 
     [SerializeField]
     private float distanceToMarshall;
 
-    [HideInInspector]
+    //[HideInInspector]
     public float distanceOfViewing;
     public float calmDistanceOfViewing;
     public float angryDistanceOfViewing;
+
+    private float calmDistUnshined;
+    private float calmDistShined;
 
     [SerializeField]
     GameObject marshall;
@@ -48,13 +54,15 @@ public class VisualDetecterController : MonoBehaviour
         name = this.transform.parent.name;
 
         isMashallVisible = false;
-        isMarshalOnSafeZoneAndHiden = false;
+        isMarshalOnSafeZone = false;
         numerOfObstacles = 0;
         numberOfShelters = 0;
         distanceToMarshall = 0f;
 
-        calmDistanceOfViewing = 7f;
-        angryDistanceOfViewing = 10f;
+        calmDistUnshined = 3.5f;
+        calmDistShined = 7f;
+        calmDistanceOfViewing = calmDistUnshined;
+        angryDistanceOfViewing = 12f;
         distanceOfViewing = calmDistanceOfViewing;
 
         view = GetComponent<EdgeCollider2D>();
@@ -66,6 +74,8 @@ public class VisualDetecterController : MonoBehaviour
         shelters = new Dictionary<string, GameObject>();
         newVerticies.Add(Vector2.zero);
         newVerticies.Add(marshall.transform.position - transform.position);
+
+        StartCoroutine(startDetecting(0.1f));
     }
 
     // Update is called once per frame
@@ -78,15 +88,22 @@ public class VisualDetecterController : MonoBehaviour
 
         distanceToMarshall = Vector2.Distance(view.points[0], view.points[1]);
 
-        isMarshalOnSafeZoneAndHiden = false;
+        isMarshalOnSafeZone = false;
         foreach (var shelter in shelters) {
             if (shelter.Value.GetComponent<ShelterLogic>().information[name].isHided) {
-                isMarshalOnSafeZoneAndHiden = true;
+                isMarshalOnSafeZone = true;
                 break;
             }
         }
 
-        //if()
+        if (marshallController.isShined)
+        {
+            calmDistanceOfViewing = calmDistShined;
+        }
+        else {
+            calmDistanceOfViewing = calmDistUnshined;
+
+        }
 
         numberOfShelters = shelters.Count;
 
@@ -100,11 +117,11 @@ public class VisualDetecterController : MonoBehaviour
                 isMashallVisible = false;
             }
             else {
-                if (isMarshalOnSafeZoneAndHiden && marshallController.isSitting)
+                if (isMarshalOnSafeZone && marshallController.isSitting)
                 {
                     isMashallVisible = false;
                 }
-                else {
+                else if (isStartDetecting){
                     isMashallVisible = true;
                 }
             }
@@ -136,4 +153,9 @@ public class VisualDetecterController : MonoBehaviour
             shelters.Remove(other.name);
         }
     }
+
+    IEnumerator startDetecting(float time) {
+        yield return new WaitForSecondsRealtime(time);
+        isStartDetecting = true;
+    } 
 }

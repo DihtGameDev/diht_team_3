@@ -6,30 +6,22 @@ using UnityEngine.Experimental.Rendering.Universal;
 
 public class LightController : MonoBehaviour
 {
+    CircleCollider2D visibleArea;
 
-    float intesivity;
+    GameObject marshall;
+    MarshallController marshallController;
+    SwitcherLogic switcher;
 
-    List<GameObject> children;
-    // Start is called before the first frame update
+
+    public bool isShine = true;
+
     void Start()
     {
-        //intesivity = 1.2f;
+        marshall = GameObject.FindGameObjectWithTag("Marshall").gameObject;
+        marshallController = marshall.GetComponent<MarshallController>();
 
-        children = new List<GameObject>();
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            children.Add(transform.GetChild(i).gameObject);
-        }
-
-        for (int i = 0; i < transform.childCount; i++)
-        {
-           // children[i].GetComponent<Light2D>().intensity = intesivity;
-        }
-
-
-
-
-
+        switcher = transform.parent.FindChild("Switcher").GetComponent<SwitcherLogic>();
+        visibleArea = GetComponent<CircleCollider2D>();
     }
 
     // Update is called once per frame
@@ -37,4 +29,34 @@ public class LightController : MonoBehaviour
     {
         
     }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Marshall"))
+        {
+            if (switcher != null) {
+                switcher.isOnArea = true;
+            }
+            
+            if (isShine) {
+                marshallController.shinersCounter++;
+            }
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Marshall"))
+        {
+            if (switcher != null)
+            {
+                switcher.isOnArea = false;
+            }
+            if (isShine)
+            {
+                marshallController.shinersCounter--;
+            }
+        }
+    }
+
 }

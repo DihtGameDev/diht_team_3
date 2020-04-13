@@ -5,7 +5,6 @@ using UnityEngine;
 public class DialogeTriggerHospital2 : MonoBehaviour
 {
 
-    int pointer = 1;
     public bool start = false;
     [SerializeField]
     private GameObject marshall;
@@ -25,6 +24,7 @@ public class DialogeTriggerHospital2 : MonoBehaviour
 
     public Dialoge dialoge;
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -41,19 +41,18 @@ public class DialogeTriggerHospital2 : MonoBehaviour
     void Update()
     {
  
-        if (Input.GetKeyDown(KeyCode.LeftShift) && dController.pointer == pointer) {
-            pointer++;
+        if (Input.GetKeyDown(KeyCode.LeftShift) && dController.pointer == 1) {
+            StartCoroutine(Close(0.1f));
             StartCoroutine(comeBack());
         }
 
-        if (marshall.transform.position.x >= 7f) {
+        if (marshall.transform.position.x >= 6.3f) {
 
             StartCoroutine(Display(0.05f));
         }
+        if (marshall.transform.position.x >= 7.3f && dController.pointer == 2)
 
-        if (marshall.transform.position.x >= 7.8f && dController.pointer == pointer)
         {
-            pointer++;
             StartCoroutine(Close(0.05f));
         }
 
@@ -84,7 +83,7 @@ public class DialogeTriggerHospital2 : MonoBehaviour
         cameraPosition = camera.transform.position;
         cameraController.isRestricted = true;
         Time.timeScale = 0.1f;
-        StartCoroutine(Display(0.1f));
+       
         while (Vector2.Distance(camera.transform.position, enemy.transform.position) >= 0.2f) {
 
             camera.transform.position = Vector3.MoveTowards(camera.transform.position,
@@ -96,7 +95,7 @@ public class DialogeTriggerHospital2 : MonoBehaviour
     IEnumerator comeBack()
     {
         Time.timeScale = 1f;
-        StartCoroutine(Close(0.1f));
+ 
         while (Vector3.Distance(camera.transform.position, cameraPosition) >= 0.1f)
         {
             camera.transform.position = Vector3.MoveTowards(camera.transform.position,
@@ -113,9 +112,11 @@ public class DialogeTriggerHospital2 : MonoBehaviour
         {
             if (start == false) {
                 start = true;
+                StartCoroutine(Display(0.1f));
                 StartCoroutine(attention());
             }
            
         }
     }
+
 }

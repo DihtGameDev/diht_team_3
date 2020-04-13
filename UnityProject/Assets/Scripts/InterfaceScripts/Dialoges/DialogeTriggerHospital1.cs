@@ -8,7 +8,7 @@ public class DialogeTriggerHospital1 : MonoBehaviour
     public bool isPressedS = false;
     public bool isLookedAround = false;
 
-    private int pointer = 1;
+
     public Vector2 tmpPosition;
     [SerializeField]
     DialogeController dController;
@@ -22,29 +22,29 @@ public class DialogeTriggerHospital1 : MonoBehaviour
 
         TriggerDialoge();
 
-        StartCoroutine(Display(1.2f));
+        StartCoroutine(Display(1.0f));
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.W) && dController.pointer == pointer)
+        if (Input.GetKeyDown(KeyCode.W) && dController.pointer == 1)
         {
-            pointer++;
+
             StartCoroutine(Close(0.2f));
-            StartCoroutine(Display(0.7f));
+            StartCoroutine(Display(0.6f));
         }
 
-        if (Input.GetKeyDown(KeyCode.S) && dController.pointer == pointer)
+        if (Input.GetKeyDown(KeyCode.S) && dController.pointer == 2)
         {
-            pointer++;
+
             StartCoroutine(Close(0.2f));
-            StartCoroutine(Display(0.7f));
+            StartCoroutine(Display(0.6f));
         }
 
 
-        if (Vector2.Distance(Input.mousePosition, tmpPosition) > 100f && dController.pointer == pointer) {
-            pointer++;
+        if (Vector2.Distance(Input.mousePosition, tmpPosition) > 100f && dController.pointer == 3) {
+
             isLookedAround = true;
             StartCoroutine(Close(0.3f));
         }
