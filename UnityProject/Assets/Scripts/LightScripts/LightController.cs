@@ -20,7 +20,7 @@ public class LightController : MonoBehaviour
         marshall = GameObject.FindGameObjectWithTag("Marshall").gameObject;
         marshallController = marshall.GetComponent<MarshallController>();
 
-        switcher = transform.parent.FindChild("Switcher").GetComponent<SwitcherLogic>();
+        switcher = transform.parent.Find("Switcher").GetComponent<SwitcherLogic>();
         visibleArea = GetComponent<CircleCollider2D>();
     }
 

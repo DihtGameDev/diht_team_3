@@ -75,7 +75,7 @@ public class MarshallController : MonoBehaviour
     {
         fader = GameObject.Find("Fader").GetComponent<PlayableDirector>();
 
-        sprite = transform.FindChild("Sprite").GetComponent<SpriteRenderer>();
+        sprite = transform.Find("Sprite").GetComponent<SpriteRenderer>();
 
         //Default VARIABLES
         collider = transform.GetComponent<BoxCollider2D>();

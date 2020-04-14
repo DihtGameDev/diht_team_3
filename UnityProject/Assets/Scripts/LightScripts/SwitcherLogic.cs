@@ -36,10 +36,10 @@ public class SwitcherLogic : MonoBehaviour
         marshall = GameObject.FindGameObjectWithTag("Marshall").gameObject;
         marshallController = marshall.GetComponent<MarshallController>();
 
-        lighter = transform.parent.FindChild("Light").GetComponent<Light2D>();
-        lightController = transform.parent.FindChild("Light").GetComponent<LightController>();
+        lighter = transform.parent.Find("Light").GetComponent<Light2D>();
+        lightController = transform.parent.Find("Light").GetComponent<LightController>();
 
-        renderer = transform.FindChild("Sprite").GetComponent<SpriteRenderer>();
+        renderer = transform.Find("Sprite").GetComponent<SpriteRenderer>();
         startColor = renderer.color;
         triggerColor = Color.white;
         start_intensity = lighter.intensity;
