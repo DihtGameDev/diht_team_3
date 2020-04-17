@@ -16,8 +16,8 @@ public class DialogeTriggerHospital4 : MonoBehaviour
 
         TriggerDialoge();
 
-        StartCoroutine(Display(1.0f));
-        StartCoroutine(Close(5.0f));
+        StartCoroutine(Display(2.5f));
+        StartCoroutine(Close(7f));
     }
 
 
@@ -35,6 +35,7 @@ public class DialogeTriggerHospital4 : MonoBehaviour
 
     IEnumerator Display(float time)
     {
+        dController.pointer++;
         yield return new WaitForSeconds(time);
         Debug.Log("TrigDisplay");
         dController.DisplayNextSentence();

@@ -41,7 +41,7 @@ public class DialogeTriggerHospital2 : MonoBehaviour
     void Update()
     {
  
-        if (Input.GetKeyDown(KeyCode.LeftShift) && dController.pointer == 1) {
+        if (Input.GetKeyDown(KeyCode.LeftShift) && dController.pointer == 2) {
             StartCoroutine(Close(0.1f));
             StartCoroutine(comeBack());
         }
@@ -50,7 +50,7 @@ public class DialogeTriggerHospital2 : MonoBehaviour
 
             StartCoroutine(Display(0.05f));
         }
-        if (marshall.transform.position.x >= 7.3f && dController.pointer == 2)
+        if (marshall.transform.position.x >= 7.3f && dController.pointer == 4)
 
         {
             StartCoroutine(Close(0.05f));
@@ -66,6 +66,7 @@ public class DialogeTriggerHospital2 : MonoBehaviour
 
     IEnumerator Display(float time)
     {
+        dController.pointer++;
         yield return new WaitForSecondsRealtime(time);
         Debug.Log("TrigDisplay");
         dController.DisplayNextSentence();

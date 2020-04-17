@@ -25,7 +25,7 @@ public class SwitcherLogic : MonoBehaviour
     MarshallController marshallController;
 
     [SerializeField]
-    bool isCanToClick = false;
+    bool isOnClickArea = false;
 
     public bool isOnArea = false;
 
@@ -49,13 +49,15 @@ public class SwitcherLogic : MonoBehaviour
     void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.Space) && isCanToClick && isAlloedToPress) {
+        if (Input.GetKeyDown(KeyCode.Space) && isOnClickArea && isAlloedToPress
+            && !marshallController.isRestricted) {
 
             lightController.isShine = !lightController.isShine;
             StopAllCoroutines();
             StartCoroutine(buttonChangeColor());
             lighter.intensity = lightController.isShine ? start_intensity : 0f;
             lighter.gameObject.GetComponent<TriggerLogic>().isTrigger = true;
+
             if (isOnArea) {
                 if (lightController.isShine)
                 {
@@ -76,7 +78,7 @@ public class SwitcherLogic : MonoBehaviour
             if (lightController.isShine) {
                 StartCoroutine(lightSignal());
             }
-            isCanToClick = true;
+            isOnClickArea = true;
         }
     }
 
@@ -85,12 +87,13 @@ public class SwitcherLogic : MonoBehaviour
         if (other.CompareTag("Marshall"))
         {
             renderer.color = startColor;
-            isCanToClick = false;
+            isOnClickArea = false;
         }
     }
 
     IEnumerator lightSignal() {
         float start_intensity = lighter.intensity;
+        lighter.GetComponent<LightController>().isSignalizeToPlayer = true;
         for (int i = 0; i < 2; i++)
         {
             lighter.intensity = 0f;
@@ -98,7 +101,8 @@ public class SwitcherLogic : MonoBehaviour
             lighter.intensity = start_intensity;
             yield return new WaitForSeconds(0.05f);
         }
-       
+        lighter.GetComponent<LightController>().isSignalizeToPlayer = false;
+
     }
 
     IEnumerator buttonChangeColor()
