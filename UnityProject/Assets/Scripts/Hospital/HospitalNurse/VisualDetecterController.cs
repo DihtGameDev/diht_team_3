@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class VisualDetecterController : MonoBehaviour
 {
-
+    [SerializeField]
     bool isStartDetecting = false;
 
     //[HideInInspector]
@@ -75,7 +75,7 @@ public class VisualDetecterController : MonoBehaviour
         newVerticies.Add(Vector2.zero);
         newVerticies.Add(marshall.transform.position - transform.position);
 
-        StartCoroutine(startDetecting(0.1f));
+        StartCoroutine(startDetecting(0.05f));
     }
 
     // Update is called once per frame

@@ -5,18 +5,16 @@ using Pathfinding;
 
 public class HospitalNurseController : MonoBehaviour
 {
-
+ 
     [HideInInspector]
     public float height;
 
     private GameObject marshall;
-
     private MarshallController marshallController;
 
     private VisualDetecterController visualDetecter;
 
 
-    public Vector2 default_position; 
   //  [SerializeField]
     private float maxTimeOfChasing;
    // [SerializeField]
@@ -40,10 +38,24 @@ public class HospitalNurseController : MonoBehaviour
 
     private bool isMarshallVisible; // видет ли враг ГГ
 
-    public bool isTriggerOnTheLight; // кто то рядом выключает или включает свет
+    //LIGHT TRIGGERING
+    public class LightTrigger
+    {  // кто то рядом выключает или включает свет
+        public bool isTriggerOnTheLight;
+        public GameObject light;
+        public LightTrigger(bool b, GameObject l = null) {
+            isTriggerOnTheLight = b;
+            light = l;
+        }
+    }
+    [SerializeField]
+    public LightTrigger lightTrigger = new LightTrigger(false);
+    
     
     [SerializeField]
     private bool isCalm; // враг спокоен
+    [SerializeField]
+    private bool isWanderingOnLight;
     [SerializeField]
     private bool isWandering; //враг сейчас тебя заметит и есть время чтобы спрятаться
     [SerializeField]
@@ -65,11 +77,12 @@ public class HospitalNurseController : MonoBehaviour
 
     private float timeOfWandering; // время чтобы когда можно спрятаться
     private float timeOfAnxiousWandering; // время чтобы можно спрятаться после того как почти заметили
+    private float timeOfLightWandering; // время тригера на свет
 
-    private float cur_timeOfWandering, cur_timeOfAnxiousWandering;
+    private float cur_timeOfWandering, cur_timeOfAnxiousWandering, cur_timeOfLightWandering;
 
 
-    private float changable_timeOfCalming, changable_timeOfEasyCalming, changable_timeOfWandering;
+    private float changable_timeOfCalming, changable_timeOfEasyCalming, changable_timeOfWandering, changable_timeOfLightWandering;
 
 
     private float timeOfPatheringAfterDisappear;
@@ -85,20 +98,21 @@ public class HospitalNurseController : MonoBehaviour
 
     public List<Vector2> defaultTrajectory = new List<Vector2>();
 
-    private IEnumerator def_move;
+    public float waitingOnDefaultPoint = 1.0f;
+    private int pointerOfDefMove = 0;
+    public float _waitingOnDefaultPoint = 0f;
 
     // Start is called before the first frame update
     void Start()
     {
-        //def_move = default_Move(2.0f);
         if (defaultTrajectory.Count == 0) {
             defaultTrajectory.Add(transform.position);
         }
 
-        //target = defaultTrajectory[0];
-
-        default_position = transform.position;
-        target = default_position;
+        /*for (int i = 0; i < defaultTrajectory.Count; i++) {
+            defaultTrajectory[i] += new Vector2(transform.parent.position.x, transform.parent.position.y);
+        }*/
+        target = defaultTrajectory[0];
         
         //Default VARIABLES
         marshall = GameObject.FindGameObjectWithTag("Marshall").gameObject;
@@ -114,10 +128,9 @@ public class HospitalNurseController : MonoBehaviour
 
         isMarshallVisible = false;
 
-        isTriggerOnTheLight = false;
-
         isCalm = true;
         isWandering = false;
+        isWanderingOnLight = false;
         isAnxious = false;
         isVeryAnxious = false;
         isNeedToRush = false;
@@ -132,7 +145,7 @@ public class HospitalNurseController : MonoBehaviour
         height = 0f;
 
         walkSpeed = 1.2f;
-        runSpeed = 1.8f;
+        runSpeed = 2.4f;
         speed = walkSpeed;
 
         maxTimeOfChasing = 10f;
@@ -144,15 +157,16 @@ public class HospitalNurseController : MonoBehaviour
         changable_timeOfEasyCalming = 2f;
         changable_timeOfWandering = 3f;
 
+        changable_timeOfLightWandering = 4f;
+
         timeOfPatheringAfterDisappear = 1f;
 
         timeOfWandering = findAnimationClip(alarmAnimator.runtimeAnimatorController.animationClips, "Wander").length;
         timeOfAnxiousWandering = findAnimationClip(alarmAnimator.runtimeAnimatorController.animationClips, "Wander").length / seriosnessOfAnxiety;
         timeOfEasyCalming = findAnimationClip(alarmAnimator.runtimeAnimatorController.animationClips, "Anxious").length;
         timeOfCalming = findAnimationClip(alarmAnimator.runtimeAnimatorController.animationClips, "veryAnxious").length;
+        timeOfLightWandering = findAnimationClip(alarmAnimator.runtimeAnimatorController.animationClips, "Wander").length;
 
-
-        //StartCoroutine(def_move);
     }
 
     // Update is called once per frame
@@ -161,12 +175,17 @@ public class HospitalNurseController : MonoBehaviour
 
         cur_timeOfWandering = Vector2.Distance(transform.position, marshall.transform.position) * changable_timeOfWandering / influence_of_distance_on_Wander;
         cur_timeOfAnxiousWandering = cur_timeOfWandering / seriosnessOfAnxiety;
+        if (lightTrigger.isTriggerOnTheLight) {
+            cur_timeOfLightWandering = Vector2.Distance(transform.position, lightTrigger.light.transform.position) * changable_timeOfLightWandering / influence_of_distance_on_Wander;
+        }
 
         //SPEEDING THE ANIMATION
         if (isWandering)
         {
-            alarmAnimator.speed = (timeOfWandering / changable_timeOfWandering) *
-                (influence_of_distance_on_Wander / Vector2.Distance(transform.position, marshall.transform.position));
+            alarmAnimator.speed = timeOfWandering / cur_timeOfWandering;
+        }
+        else if (lightTrigger.isTriggerOnTheLight){
+            alarmAnimator.speed = timeOfLightWandering / cur_timeOfLightWandering;
         }
         else if (isVeryAnxious)
         {
@@ -183,24 +202,13 @@ public class HospitalNurseController : MonoBehaviour
         //DETECTING MARSHALL
         isMarshallVisible = visualDetecter.isMashallVisible;
 
-
         #region detectingLogic
-        if (isTriggerOnTheLight && isCalm)
+        if (lightTrigger.isTriggerOnTheLight && isCalm)
         {
-            isTriggerOnTheLight = false;
-            StopAllCoroutines();
+            lightTrigger.isTriggerOnTheLight = false;
             isCalm = false;
-            isWandering = true;
-            StartCoroutine(wander());
-        }
-
-        if (isTriggerOnTheLight && isWandering)
-        {
-            isTriggerOnTheLight = false;
-            StopAllCoroutines();
-            isWandering = false;
-            isNeedToRush = true;
-            marshallController.number_of_rushers++;
+            isWanderingOnLight = true;
+            StartCoroutine(lightWandering(cur_timeOfLightWandering));
         }
 
 
@@ -223,6 +231,7 @@ public class HospitalNurseController : MonoBehaviour
                 isVeryAnxious = false;
                 isRunningToPoint = false;
                 marshallController.number_of_rushers++;
+              
                 isNeedToRush = true;         
             }
         }
@@ -238,12 +247,23 @@ public class HospitalNurseController : MonoBehaviour
 
         //MOVING
         #region moving
+        // Default moving (IEnumereator isn't resolved!!!)
+        if (isCameToTarget && (isCalm || isWandering || isAnxious)) {
+            if (_waitingOnDefaultPoint > waitingOnDefaultPoint)
+            {
+                _waitingOnDefaultPoint = 0;
+                target = defaultTrajectory[pointerOfDefMove % defaultTrajectory.Count];
+                pointerOfDefMove++;
+            }
+            else {
+                _waitingOnDefaultPoint += Time.deltaTime;
+            }
 
-
+        
+        }
         //Defining the target to move, speed and area of viewing
         if (isNeedToRush)
-        {
-            
+        {          
             target = marshall.transform.position;
         }
 
@@ -257,16 +277,11 @@ public class HospitalNurseController : MonoBehaviour
             visualDetecter.distanceOfViewing = visualDetecter.calmDistanceOfViewing;
         }
 
-        if (isCameToTarget && isCalm) {
-            target = default_position;
-        }
-
-
-        pathfinder.destination = target;
+        pathfinder.destination = target; //+ new Vector2(transform.parent.position.x, transform.parent.position.y);
         pathfinder.maxSpeed = speed;
 
         //Conditions of coming to target
-        if (Vector2.Distance(transform.position, target) < pathfinder.endReachedDistance + 0.3f)
+        if (Vector2.Distance(transform.position, target) < pathfinder.endReachedDistance + 0.4f)
         {
             pathfinder.canSearch = false;
             isCameToTarget = true;
@@ -303,7 +318,7 @@ public class HospitalNurseController : MonoBehaviour
             alarmAnimator.SetBool("isCalm", true);
         }
         else { alarmAnimator.SetBool("isCalm", false); }
-        if (isWandering)
+        if (isWandering || isWanderingOnLight)
         {
             alarmAnimator.SetBool("isWander", true);
         }
@@ -335,6 +350,38 @@ public class HospitalNurseController : MonoBehaviour
     }
 
     #region detectingTimingIEnunerators
+
+    
+    IEnumerator lightWandering(float time)
+    {
+        float timer = 0f;
+
+        while (timer < time)
+        {
+            if (isMarshallVisible) {
+                isWanderingOnLight = false;
+                
+                isNeedToRush = true;
+                hasEverNoticed = true;
+                marshallController.number_of_rushers++;
+                yield return 0;
+            }
+            if (lightTrigger.isTriggerOnTheLight) {
+                lightTrigger.isTriggerOnTheLight = false;
+                timer = -time;
+              
+                target = lightTrigger.light.transform.position;
+            }
+            timer += Time.deltaTime;
+         
+            yield return null;
+        }
+        isWanderingOnLight = false;
+
+        isAnxious = true;
+        StartCoroutine(easyCalmDown(time));
+    }
+
     IEnumerator wander()
     {
         float timer = 0f;
@@ -350,7 +397,7 @@ public class HospitalNurseController : MonoBehaviour
 
         if (isMarshallVisible)
         {
-            //StopCoroutine(def_move);
+       
             isNeedToRush = true;
 
             hasEverNoticed = true;
@@ -377,7 +424,7 @@ public class HospitalNurseController : MonoBehaviour
 
         if (isMarshallVisible)
         {
-            //StopCoroutine(def_move);
+        
             isNeedToRush = true;
 
             marshallController.number_of_rushers++;
@@ -402,7 +449,7 @@ public class HospitalNurseController : MonoBehaviour
 
         StartCoroutine(easyCalmDown(changable_timeOfEasyCalming));
 
-        StartCoroutine(def_move);
+      
     }
 
     IEnumerator run()
@@ -423,8 +470,12 @@ public class HospitalNurseController : MonoBehaviour
         yield return new WaitForSeconds(time);
 
         isAnxious = false;
+
+
         isCalm = true;
     }
+
+   
 
     IEnumerator leftOverPathering(float time) {
         while (time > 0) {
@@ -436,24 +487,7 @@ public class HospitalNurseController : MonoBehaviour
     }
     #endregion
 
-/*
-    public IEnumerator default_Move(float waiting) {
-        int pointer = 0;
-        while (true) {
-                Debug.Log(pointer++);
-            
-            foreach (var point in defaultTrajectory) {
-                while (!isCameToTarget) {
-                    yield return null;
-                }
-                
-                yield return new WaitForSeconds(waiting);
-                target = point;
-            }
-           
-        }
-    }
-    */
+
     private AnimationClip findAnimationClip(AnimationClip[] array, string findName) {
         foreach (var obj in array) {
             if (obj.name == findName) {

@@ -35,9 +35,12 @@ public class CameraScript : MonoBehaviour
 
     }
 
-    // Update is called once per frame
+    // Update is callewd once per frame
     void Update()
     {
+
+        this.GetComponent<Camera>().orthographicSize = 
+            Mathf.Clamp(Vector2.Distance(transform.position, marshall.transform.position) * 0.5f + 1.75f, 2.5f, 3f);
         mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
         Vector3 newCameraPosition = new Vector3((camera_position_X * marshall.position.x + mousePosition.x) / (camera_position_X + 1f),

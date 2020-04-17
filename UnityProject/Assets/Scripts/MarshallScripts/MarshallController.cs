@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Playables;
+
 
 public class MarshallController : MonoBehaviour
 {
+
+    public int health;
+
     public bool isScript;
 
     public bool isRestricted = false;
@@ -19,7 +22,7 @@ public class MarshallController : MonoBehaviour
 
     //Moving
     [SerializeField]
-    Vector2 diretion;
+    Vector2 direction;
 
     private float rightAxis, leftAxis, upAxis, downAxis;
 
@@ -61,9 +64,11 @@ public class MarshallController : MonoBehaviour
 
     //Animation
 
-    private PlayableDirector fader;
+
 
     private Animator anim;
+
+    private Animator interFaceAnim;
 
     private SpriteRenderer sprite;
 
@@ -73,7 +78,8 @@ public class MarshallController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        fader = GameObject.Find("Fader").GetComponent<PlayableDirector>();
+          
+        health = 6;
 
         sprite = transform.Find("Sprite").GetComponent<SpriteRenderer>();
 
@@ -81,9 +87,12 @@ public class MarshallController : MonoBehaviour
         collider = transform.GetComponent<BoxCollider2D>();
 
         anim = transform.GetComponent<Animator>();
+
+        interFaceAnim = GameObject.Find("Interface").GetComponent<Animator>();
+        
         rb = transform.GetComponent<Rigidbody2D>();
 
-        diretion = Vector2.zero;
+        direction = Vector2.zero;
 
         isCaptured = false;
         isChasable = false;
@@ -102,10 +111,10 @@ public class MarshallController : MonoBehaviour
         marshal_height = 0f;
 
         scriptMomentSpeed = 0.8f;
-        walkSpeed = 2f;
-        runSpeed = 2.5f;
+        walkSpeed = 1.8f;
+        runSpeed = 2.3f;
         crawlSpeed = 1.2f;
-        fastCrawlSpeed = 1.5f;
+        fastCrawlSpeed = 1.6f;
         speed = walkSpeed;
 
     }
@@ -113,14 +122,15 @@ public class MarshallController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        sprite.material.SetFloat("_Fade", Mathf.PingPong(Time.time, 1f));
         // LIGHTERS
-        if (shinersCounter > 0)
+        if (shinersCounter == 0)
         {
-            isShined = true;
+            isShined = false;
         }
         else
         {
-            isShined = false;
+            isShined = true;
         }
 
         //ENEMIES
@@ -175,12 +185,13 @@ public class MarshallController : MonoBehaviour
         }
         else { downAxis = 0f; }
 
-        diretion = new Vector2(rightAxis + leftAxis, upAxis + downAxis);
+        direction = new Vector2(rightAxis + leftAxis, upAxis + downAxis);
         if (!isRestricted)
         {
-            move(diretion);
+            move(direction);
         }
         #endregion
+
 
         //ANIMATION
         if (!isRestricted)
@@ -191,7 +202,7 @@ public class MarshallController : MonoBehaviour
             anim.speed = 0f;
         }
 
-        if (diretion == new Vector2(0f, 0f))
+        if (direction == new Vector2(0f, 0f))
         {
             anim.SetBool("isMoving", false);
         }
@@ -202,6 +213,22 @@ public class MarshallController : MonoBehaviour
             sprite.flipX = false;
         }
         else if (rightAxis + leftAxis < 0f) { sprite.flipX = true; }
+
+        if (direction.y == -1f && direction.x == 0f)
+        {
+            anim.SetBool("isUp", false);
+            anim.SetBool("isDown", true);
+        }
+        if (direction.y == 1f && direction.x == 0f)
+        {
+            anim.SetBool("isDown", false);
+            anim.SetBool("isUp", true);
+        }
+        if (direction.x != 0f) {
+            anim.SetBool("isDown", false);
+            anim.SetBool("isUp", false);
+        }
+       
 
 
         //SITTING
@@ -232,12 +259,14 @@ public class MarshallController : MonoBehaviour
     {
         if (other.CompareTag("Link"))
         {
-            fader.Play();
-            StartCoroutine(Wait(2f));
+            if (interFaceAnim != null)
+            {
+                interFaceAnim.SetBool("isEnding", true);
+            }
+            StartCoroutine(Wait(findAnimationClip(interFaceAnim.runtimeAnimatorController.animationClips, "FadeAway").length));
             transform.position = new Vector2(transform.position.x + 10f, transform.position.y);
         }
     }
-
 
     IEnumerator Wait(float time)
     {
@@ -245,4 +274,16 @@ public class MarshallController : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
+
+    private AnimationClip findAnimationClip(AnimationClip[] array, string findName)
+    {
+        foreach (var obj in array)
+        {
+            if (obj.name == findName)
+            {
+                return obj;
+            }
+        }
+        return null;
+    }
 }

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TriggerLogic : MonoBehaviour
 {
+    public bool isProblemLight;
+    private float wallHigh = 1.3f;
     public bool isTrigger = false;
 
     public float distanceOfTriggering;
@@ -15,10 +17,13 @@ public class TriggerLogic : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        distanceOfTriggering = 4f;
+        distanceOfTriggering = 8f;
+
+        
         foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemy"))
         {
-            GameObject newObj = Instantiate(checker, this.transform.position, Quaternion.identity);
+            GameObject newObj = Instantiate(checker, 
+                new Vector2(transform.position.x, transform.position.y - wallHigh), Quaternion.identity);
             newObj.AddComponent<Checker>();
             newObj.GetComponent<Checker>().target = enemy;
             newObj.GetComponent<Checker>().parent = this.gameObject;
@@ -35,7 +40,10 @@ public class TriggerLogic : MonoBehaviour
             foreach (var checker in checkersStates)
             {
                 if (checker.GetComponent<Checker>().targetIsObserving) {
-                    checker.GetComponent<Checker>().target.GetComponent<HospitalNurseController>().isTriggerOnTheLight = true; 
+                    checker.GetComponent<Checker>().target.
+                        GetComponent<HospitalNurseController>().lightTrigger.isTriggerOnTheLight = true;
+                    checker.GetComponent<Checker>().target.
+                        GetComponent<HospitalNurseController>().lightTrigger.light = transform.gameObject;
                 }
             }
         }

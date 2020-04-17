@@ -9,6 +9,7 @@ public class ButtonController : MonoBehaviour
 {
     
     public PlayableDirector fader;
+    public PlayableDirector blueMoon;
     // Start is called before the first frame update
 
     [SerializeField]
@@ -79,13 +80,16 @@ public class ButtonController : MonoBehaviour
     }
 
     public void Play() {
-        fader.Play();
-        StartCoroutine(Wait(3f));
+        StartCoroutine(PlayGame());
     }
 
-    IEnumerator Wait(float time)
+
+    IEnumerator PlayGame()
     {
-        yield return new WaitForSecondsRealtime(2f);
+        fader.Play();
+        yield return new WaitForSecondsRealtime(7.29f);
+        blueMoon.Play();
+        yield return new WaitForSecondsRealtime(5f);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 }

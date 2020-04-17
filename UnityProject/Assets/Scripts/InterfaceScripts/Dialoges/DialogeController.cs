@@ -5,11 +5,16 @@ using UnityEngine.UI;
 
 public class DialogeController : MonoBehaviour
 {
+
+    public bool flexible_speed_of_typing;
+    public int pointer = 0;
+    private bool isTyping = false;
+    private bool isStopTyping = false;
+
     public Text nameText;
     public Text dialogeText;
 
     public Animator animator;
-    public int pointer = 0;
 
     [SerializeField]
     private Queue<string> sentences = new Queue<string>();
@@ -21,8 +26,13 @@ public class DialogeController : MonoBehaviour
         mouseTrigger = FindObjectOfType<DialogeTriggerHospital1>();
     }
 
-    void Update() {
+    void Update()
+    {
         animator.speed = 1f / Time.timeScale;
+        if (Input.GetKeyDown(KeyCode.Space) && isTyping)
+        {
+            isStopTyping = true;
+        }
     }
 
     public void StartDialoge(Dialoge dialoge) {
@@ -62,15 +72,28 @@ public class DialogeController : MonoBehaviour
     }
 
     IEnumerator TypeSentence(string sentence) {
+        
         yield return new WaitForSecondsRealtime(0.3f);
         
-         dialogeText.text = "";
+        dialogeText.text = "";
+        
+        isTyping = true;
         foreach (char letter in sentence.ToCharArray()) {
+            if (isStopTyping) {
+                isStopTyping = false;
+                isTyping = false;
+                dialogeText.text = sentence;
+                break;
+            }
             dialogeText.text += letter;
-            yield return new WaitForSecondsRealtime(0.8f / sentence.Length);
+            yield return new WaitForSecondsRealtime(flexible_speed_of_typing ? 
+                (1.3f / sentence.Length) : 0.05f);
         }
-        pointer++;
+
+        isTyping = false;
+
         if (mouseTrigger != null)
         { mouseTrigger.tmpPosition = Input.mousePosition; }
+        pointer++;
     }
 }

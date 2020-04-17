@@ -58,9 +58,9 @@ public class FadeChecker : MonoBehaviour
         }
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    void OnTriggerStay2D(Collider2D other)
     {
-        if (other.tag == "Marshall")
+        if (other.CompareTag("Marshall") || other.CompareTag("Enemy"))
         {
             targ_transparency = transparency;
         }
@@ -68,7 +68,7 @@ public class FadeChecker : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.tag == "Marshall")
+        if (other.CompareTag("Marshall") || other.CompareTag("Enemy"))
         {
             targ_transparency = 1f;
         }

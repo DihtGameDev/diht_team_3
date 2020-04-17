@@ -12,11 +12,17 @@ public class LightController : MonoBehaviour
     MarshallController marshallController;
     SwitcherLogic switcher;
 
-
+    private float start_intencity;
     public bool isShine = true;
+    public bool isSignalizeToPlayer = false;
+
+    public float force_of_fading = 0.25f;
+    public float frequency_of_fading = 1.5f;
+
 
     void Start()
     {
+        start_intencity = GetComponent<Light2D>().intensity;
         marshall = GameObject.FindGameObjectWithTag("Marshall").gameObject;
         marshallController = marshall.GetComponent<MarshallController>();
 
@@ -27,7 +33,11 @@ public class LightController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (isShine && !isSignalizeToPlayer)
+        {
+            this.GetComponent<Light2D>().intensity =
+                start_intencity * (1f - force_of_fading) + Mathf.PingPong(Time.time * frequency_of_fading, force_of_fading);
+        }
     }
 
     void OnTriggerEnter2D(Collider2D other)

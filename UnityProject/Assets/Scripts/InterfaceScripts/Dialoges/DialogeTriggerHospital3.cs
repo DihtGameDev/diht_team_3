@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class DialogeTriggerHospital3 : MonoBehaviour
 {
+ 
 
     public bool start = false;
     [SerializeField]
@@ -44,7 +45,9 @@ public class DialogeTriggerHospital3 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (dController.pointer == 2) {
+            marshallController.isRestricted = false;
+        }
       
     }
 
@@ -56,6 +59,7 @@ public class DialogeTriggerHospital3 : MonoBehaviour
 
     IEnumerator Display(float time)
     {
+        dController.pointer++;
         yield return new WaitForSecondsRealtime(time);
         Debug.Log("TrigDisplay");
         dController.DisplayNextSentence();
@@ -68,8 +72,6 @@ public class DialogeTriggerHospital3 : MonoBehaviour
         dController.CloseSentence();
     }
 
-
-
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Marshall"))
@@ -78,6 +80,7 @@ public class DialogeTriggerHospital3 : MonoBehaviour
             {
                 start = true;
                 StartCoroutine(Display(0f));
+                marshallController.isRestricted = true;
                 StartCoroutine(attention(light, 1.2f, 0.08f));
             }        
         }
@@ -87,7 +90,7 @@ public class DialogeTriggerHospital3 : MonoBehaviour
     {
         if (other.CompareTag("Marshall"))
         {
-            if (Input.GetKeyDown(KeyCode.Space) && dController.pointer == 1 && switcher.isAlloedToPress)
+            if (Input.GetKeyDown(KeyCode.Space) && dController.pointer == 2 && switcher.isAlloedToPress)
             {
                 StartCoroutine(Display(0.0f));
                 StartCoroutine(attention(enemy, 2f, 0.08f));
@@ -120,14 +123,14 @@ public class DialogeTriggerHospital3 : MonoBehaviour
                 cameraPosition, speed);
             yield return null;
         }
-        if (dController.pointer == 2)
+        if (dController.pointer == 4)
         {
-            StartCoroutine(Close(0.4f));
+            StartCoroutine(Close(0.2f));
         }
 
         cameraController.isRestricted = false;
 
-        if (dController.pointer == 1) {
+        if (dController.pointer == 2) {
             switcher.isAlloedToPress = true;
         }
 

@@ -4,14 +4,16 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.Timeline;
+using UnityEngine.UI;
 
 public class InterFaceController : MonoBehaviour
 {
 
     private GameObject marshall;
+    private MarshallController marshallController;
 
     [SerializeField]
-    private int health;
+
 
     private GameObject healthBar;
 
@@ -19,8 +21,11 @@ public class InterFaceController : MonoBehaviour
 
     private GameObject loseMenu;
 
-    [SerializeField]
-    private List<GameObject> hearts;
+    
+    public Image[] hearts;
+
+    public Sprite fullHeart;
+    public Sprite halfHeart;
 
     GameObject eventSystem;
 
@@ -28,6 +33,7 @@ public class InterFaceController : MonoBehaviour
     void Start()
     {
         marshall = GameObject.FindGameObjectWithTag("Marshall").gameObject;
+        marshallController = marshall.GetComponent<MarshallController>();
 
         healthBar = transform.Find("HealthBar").gameObject;
 
@@ -42,18 +48,29 @@ public class InterFaceController : MonoBehaviour
 
         Cursor.visible = true;
 
-        health = healthBar.transform.childCount;
+      
 
-        for (int i = 0; i < healthBar.transform.childCount; i++) {
-            hearts.Add(healthBar.transform.GetChild(i).gameObject);
-        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        health = healthBar.transform.childCount;
+        for (int i = 0; i < hearts.Length; i++)
+        {
+            if (i < (marshallController.health + 1) / 2) {
+                hearts[i].enabled = true;
+            }
+            else {
+                hearts[i].enabled = false;
+            }
 
+            if (marshallController.health % 2 == 1) {
+                    hearts[marshallController.health / 2].sprite = halfHeart;
+            }
+            else { hearts[(marshallController.health - 1) / 2].sprite = fullHeart; }
+
+        }
+       
         if (Input.GetKeyDown(KeyCode.Escape) && !loseMenu.activeSelf) {
             if (pauseMenu.activeSelf)
             {               
