@@ -28,13 +28,21 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _NormalMa:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _DissolveScale: 57.1
-    - _EdgeWidth: 0.021
+    - _DissolveScale: 0.02
+    - _EdgeWidth: 0.005
     - _Fade: 1
-    - _GlitchOffset: 0.061
-    - _GlitchScale: 209
-    - _GlitchTransparency: 0
+    - _GlitchOffset: 0.16
+    - _GlitchScale: 177
+    - _GlitchTransparency: 0.309
     - _Scale: 23.2
     m_Colors:
     - Color_16198231: {r: 0.51785755, g: 0, b: 2, a: 1}

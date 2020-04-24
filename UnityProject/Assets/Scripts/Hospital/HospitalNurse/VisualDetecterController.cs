@@ -59,7 +59,7 @@ public class VisualDetecterController : MonoBehaviour
         numberOfShelters = 0;
         distanceToMarshall = 0f;
 
-        calmDistUnshined = 3.5f;
+        calmDistUnshined = 4f;
         calmDistShined = 7f;
         calmDistanceOfViewing = calmDistUnshined;
         angryDistanceOfViewing = 12f;

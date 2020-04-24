@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.Experimental.Rendering.Universal;
+using UnityEngine.Audio;
 
 public class MarshallController : MonoBehaviour
 {
-
+    public bool isMoving = false;
+    [Range(0, 6)]
     public int health;
 
     public bool isScript;
@@ -63,9 +65,6 @@ public class MarshallController : MonoBehaviour
     public int shinersCounter;
 
     //Animation
-
-
-
     private Animator anim;
 
     private Animator interFaceAnim;
@@ -74,23 +73,45 @@ public class MarshallController : MonoBehaviour
 
     //
     Rigidbody2D rb;
+    private GameObject pointer;
+
+    //AUDIO
+    private AudioController audioController;
+    IEnumerator walkSound;
+    private bool change_audio = false;
+    private bool change_audio_volume = false;
+
+    //LIGHTNING
+    private GameObject needToBeLighted;
 
     // Start is called before the first frame update
-    void Start()
-    {
-          
-        health = 6;
 
+    private void Awake()
+    {
         sprite = transform.Find("Sprite").GetComponent<SpriteRenderer>();
 
-        //Default VARIABLES
         collider = transform.GetComponent<BoxCollider2D>();
-
         anim = transform.GetComponent<Animator>();
 
         interFaceAnim = GameObject.Find("Interface").GetComponent<Animator>();
-        
+
         rb = transform.GetComponent<Rigidbody2D>();
+
+
+        audioController = GameObject.Find("AudioManager").gameObject.GetComponent<AudioController>();
+        walkSound = audioController.PlayWithPeriod("MarshallStep", 0.28f, true);
+        needToBeLighted = GameObject.Find("NeedToBeLighted").gameObject;    
+
+
+
+    }
+
+    private void Start()
+    {
+        health = 6;
+
+
+        //Default VARIABLES
 
         direction = Vector2.zero;
 
@@ -111,18 +132,25 @@ public class MarshallController : MonoBehaviour
         marshal_height = 0f;
 
         scriptMomentSpeed = 0.8f;
-        walkSpeed = 1.8f;
-        runSpeed = 2.3f;
+        walkSpeed = 1.75f;
+        runSpeed = 2.25f;
         crawlSpeed = 1.2f;
         fastCrawlSpeed = 1.6f;
         speed = walkSpeed;
 
-    }
 
+        pointer = GameObject.FindGameObjectWithTag("Pointer");
+        if (SceneManager.GetActiveScene().name == "Room") {
+            this.gameObject.SetActive(false);
+        }        
+      
+
+    }
     // Update is called once per frame
     void FixedUpdate()
     {
-        sprite.material.SetFloat("_Fade", Mathf.PingPong(Time.time, 1f));
+
+        //sprite.material.SetFloat("_Fade", Mathf.PingPong(Time.time, 1f));
         // LIGHTERS
         if (shinersCounter == 0)
         {
@@ -136,11 +164,23 @@ public class MarshallController : MonoBehaviour
         //ENEMIES
         if (number_of_rushers == 0)
         {
-            isChasable = false;
+            if (isChasable)
+            {
+                change_audio = true;
+                change_audio_volume = true;
+                audioController.StopChasingSound();
+                isChasable = false;
+            }
         }
         else
         {
-            isChasable = true;
+            if (!isChasable)
+            {
+                change_audio = true;
+                change_audio_volume = true;
+                audioController.StartChasingSound();
+                isChasable = true;
+            }
         }
 
         #region moving
@@ -161,25 +201,41 @@ public class MarshallController : MonoBehaviour
             speed = scriptMomentSpeed;
         }
 
-        if (Input.GetKey(moveRight))
+        if (Input.GetKey(Global.moveDown) || Input.GetKey(Global.moveUp) ||
+            Input.GetKey(Global.moveLeft) || Input.GetKey(Global.moveRight))
+        {
+            if (!isMoving) {
+                change_audio = true;
+                isMoving = true;
+            }
+        }
+        else {
+            if (isMoving)
+            {
+                change_audio = true;
+                isMoving = false;
+            }
+        }
+
+        if (Input.GetKey(Global.moveRight))
         {
             rightAxis = 1f;
         }
         else { rightAxis = 0f; }
 
-        if (Input.GetKey(moveLeft))
+        if (Input.GetKey(Global.moveLeft))
         {
             leftAxis = -1f;
         }
         else { leftAxis = 0f; }
 
-        if (Input.GetKey(moveUp) && !isScript)
+        if (Input.GetKey(Global.moveUp) && !isScript)
         {
             upAxis = 1f;
         }
         else { upAxis = 0f; }
 
-        if (Input.GetKey(moveDown) && !isScript)
+        if (Input.GetKey(Global.moveDown) && !isScript)
         {
             downAxis = -1f;
         }
@@ -194,7 +250,7 @@ public class MarshallController : MonoBehaviour
 
 
         //ANIMATION
-        if (!isRestricted)
+        if (!isRestricted && Time.timeScale != 0)
         {
             anim.speed = speed / walkSpeed;
         }
@@ -205,8 +261,12 @@ public class MarshallController : MonoBehaviour
         if (direction == new Vector2(0f, 0f))
         {
             anim.SetBool("isMoving", false);
+
         }
-        else { anim.SetBool("isMoving", true); }
+        else { 
+            anim.SetBool("isMoving", true);
+
+        }
 
         if (rightAxis + leftAxis > 0f)
         {
@@ -228,23 +288,54 @@ public class MarshallController : MonoBehaviour
             anim.SetBool("isDown", false);
             anim.SetBool("isUp", false);
         }
-       
 
+        //AUDIO
+        if (change_audio) {
+            change_audio = false;
+            if (isMoving)
+            {
+                StopCoroutine(walkSound);
+                walkSound = audioController.PlayWithPeriod("MarshallStep", 0.28f * walkSpeed/ speed, true);
+                StartCoroutine(walkSound);
+            }
+            else {
+
+                StopCoroutine(walkSound);
+            }
+        }
+
+        if (change_audio_volume) {
+            change_audio_volume = false;
+            
+            if (isSitting)
+            {
+                StartCoroutine(audioController.ChangeVolume("MarshallStep", isChasable ? audioController.GetClipRelevantVolume("MarshallStep") * 0.7f : audioController.GetClipRelevantVolume("MarshallStep") * 0.5f));
+            }
+            else {
+                StartCoroutine(audioController.ChangeVolume("MarshallStep", isChasable ? audioController.GetClipRelevantVolume("MarshallStep") * 1.4f :
+                    audioController.GetClipRelevantVolume("MarshallStep")));
+            }
+        }
 
         //SITTING
-        if (Input.GetKey(sit) && !isScript)
+        if (Input.GetKey(Global.sitDown) && !isScript && Time.timeScale != 0 && !isRestricted)
         {
-            rb.sleepMode = RigidbodySleepMode2D.StartAsleep;
+            if (!isSitting) {
+                change_audio_volume = true;
+                change_audio = true;
+            }
             isSitting = true;
 
             anim.SetBool("isSitting", true);
-
         }
         else
         {
-            rb.sleepMode = RigidbodySleepMode2D.StartAwake;
+            if (isSitting)
+            {
+                change_audio_volume = true;
+                change_audio = true;
+            }
             isSitting = false;
-
             anim.SetBool("isSitting", false);
         }
     }
@@ -259,10 +350,19 @@ public class MarshallController : MonoBehaviour
     {
         if (other.CompareTag("Link"))
         {
+            if (pointer != null)
+            {
+                Destroy(pointer.gameObject);
+            }
+            if (SceneManager.GetActiveScene().name == "Room") {
+                StartCoroutine(audioController.Stop("BackGround", findAnimationClip(interFaceAnim.runtimeAnimatorController.animationClips, "FadeAway").length));
+                StartCoroutine(audioController.Stop("NeonLamp", findAnimationClip(interFaceAnim.runtimeAnimatorController.animationClips, "FadeAway").length));
+            }
             if (interFaceAnim != null)
             {
                 interFaceAnim.SetBool("isEnding", true);
             }
+            audioController.StopChasingSound();
             StartCoroutine(Wait(findAnimationClip(interFaceAnim.runtimeAnimatorController.animationClips, "FadeAway").length));
             transform.position = new Vector2(transform.position.x + 10f, transform.position.y);
         }
@@ -274,6 +374,16 @@ public class MarshallController : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
+    public IEnumerator glitch(float time)
+    {
+        StartCoroutine(audioController.Play("Alarm"));
+        sprite.material.SetVector("_Glitch", new Vector4(0f, 0.3f, 0f, 0f));
+        sprite.material.SetFloat("_GlitchOffset", 0.18f);
+        yield return new WaitForSeconds(time);
+        sprite.material.SetFloat("_GlitchOffset", -0.05f);
+        sprite.material.SetVector("_Glitch", new Vector4(0f, 0f, 0f, 0f));
+        sprite.material.SetFloat("_GlitchOffset", 0.15f);
+    }
 
     private AnimationClip findAnimationClip(AnimationClip[] array, string findName)
     {

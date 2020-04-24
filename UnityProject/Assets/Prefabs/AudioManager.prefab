@@ -1,0 +1,165 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2171082291903154540
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2171082291903154542}
+  - component: {fileID: 2171082291903154541}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2171082291903154542
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2171082291903154540}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 707.1542, y: 312.10196, z: -153.99998}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2171082291903154541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2171082291903154540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 728c180999a21df478e3980909ec1852, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isOldGameObject: 0
+  pointer: 0
+  sounds:
+  - name: SelectButton
+    clip: {fileID: 8300000, guid: 9ed49d61842216046aa91f0436dd5ee0, type: 3}
+    volume: 0.3
+    pitch: 1.1
+    default_volume: 0
+    relevant_volume: 0
+    source: {fileID: 0}
+    loop: 0
+    type: 2
+  - name: BackGround
+    clip: {fileID: 8300000, guid: 265179100b00a594683b7c3b109f085a, type: 3}
+    volume: 0.3
+    pitch: 1.1
+    default_volume: 0
+    relevant_volume: 0
+    source: {fileID: 0}
+    loop: 1
+    type: 0
+  - name: NeonLamp
+    clip: {fileID: 8300000, guid: 7f0564b0f1bc9eb489b7872e91367c89, type: 3}
+    volume: 0.26
+    pitch: 1.1
+    default_volume: 0
+    relevant_volume: 0
+    source: {fileID: 0}
+    loop: 1
+    type: 0
+  - name: SlideDoor
+    clip: {fileID: 8300000, guid: 074969c655b495c4c839c42855d7fd99, type: 3}
+    volume: 0.4
+    pitch: 1.1
+    default_volume: 0
+    relevant_volume: 0
+    source: {fileID: 0}
+    loop: 0
+    type: 0
+  - name: 'MenuNeon '
+    clip: {fileID: 8300000, guid: 4780d2f09c032d645b1954f4b9ef83a8, type: 3}
+    volume: 0.361
+    pitch: 1.1
+    default_volume: 0
+    relevant_volume: 0
+    source: {fileID: 0}
+    loop: 1
+    type: 0
+  - name: MarshallStep
+    clip: {fileID: 8300000, guid: 7c76f4863e92da54caca5add75e3fd81, type: 3}
+    volume: 0.55
+    pitch: 1.1
+    default_volume: 0
+    relevant_volume: 0
+    source: {fileID: 0}
+    loop: 0
+    type: 0
+  - name: SelectButtonGameMenu
+    clip: {fileID: 8300000, guid: 0ee808a751a675c4284a852315530be1, type: 3}
+    volume: 1
+    pitch: 1.1
+    default_volume: 0
+    relevant_volume: 0
+    source: {fileID: 0}
+    loop: 0
+    type: 2
+  - name: Typing
+    clip: {fileID: 8300000, guid: 9ed49d61842216046aa91f0436dd5ee0, type: 3}
+    volume: 0.12
+    pitch: 1.1
+    default_volume: 0
+    relevant_volume: 0
+    source: {fileID: 0}
+    loop: 0
+    type: 2
+  - name: LightSwitch
+    clip: {fileID: 8300000, guid: 48a076c8643e7374686a08bd808bf9a1, type: 3}
+    volume: 0.6
+    pitch: 1.1
+    default_volume: 0
+    relevant_volume: 0
+    source: {fileID: 0}
+    loop: 0
+    type: 0
+  - name: RoomAnxiety
+    clip: {fileID: 8300000, guid: 36a029eb715a5ad4f8abdb4e819fcb09, type: 3}
+    volume: 0.2
+    pitch: 1.1
+    default_volume: 0
+    relevant_volume: 0
+    source: {fileID: 0}
+    loop: 1
+    type: 1
+  - name: HospitalTrack
+    clip: {fileID: 8300000, guid: 0801391cb7d5eda47bc74007408735ab, type: 3}
+    volume: 0.36
+    pitch: 1.1
+    default_volume: 0
+    relevant_volume: 0
+    source: {fileID: 0}
+    loop: 1
+    type: 1
+  - name: Alarm
+    clip: {fileID: 8300000, guid: 304bc164911b2e54f98d1e0d18c0678c, type: 3}
+    volume: 0.218
+    pitch: 1.1
+    default_volume: 0
+    relevant_volume: 0
+    source: {fileID: 0}
+    loop: 0
+    type: 0
+  - name: Tension
+    clip: {fileID: 8300000, guid: 692b0e1ad85d8b247b0b3a4d0271ca4f, type: 3}
+    volume: 0.259
+    pitch: 1.1
+    default_volume: 0
+    relevant_volume: 0
+    source: {fileID: 0}
+    loop: 1
+    type: 1

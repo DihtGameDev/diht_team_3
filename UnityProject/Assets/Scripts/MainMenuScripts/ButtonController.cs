@@ -7,89 +7,167 @@ using UnityEngine.Playables;
 
 public class ButtonController : MonoBehaviour
 {
-    
-    public PlayableDirector fader;
-    public PlayableDirector blueMoon;
+    private PlayableDirector starter;
+    private PlayableDirector fader;
+    private PlayableDirector blueMoonDirector;
+    public bool isRestricted = true;
+
     // Start is called before the first frame update
+    [SerializeField]
+    private AudioController audioController;
+  
 
     [SerializeField]
     private GameObject current;
+
 
     [SerializeField]
     private GameObject eventSystem;
 
 
+  
     void Start()
     {
+      
+
         current = this.transform.GetChild(0).gameObject;
         eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(current);
-        
+
+        starter = GameObject.Find("Starter").gameObject.GetComponent<PlayableDirector>();
+        fader = GameObject.Find("Fader").gameObject.GetComponent<PlayableDirector>();
+        blueMoonDirector = GameObject.Find("MaterialChange").gameObject.GetComponent<PlayableDirector>();
+
         #region startBuild
         Cursor.visible = false;
 
+        //Activation
+        StartCoroutine(activate(5f));
+
+        audioController = Global.audioController;
+        StartCoroutine(audioController.Play("BackGround", 5f));
+        StartCoroutine(audioController.ChangeVolume("BackGround", audioController.GetClipRelevantVolume("BackGround")));
+        StartCoroutine(audioController.Play("MenuNeon", 0f, 9.95f));
+        StartCoroutine(audioController.ChangeVolume("MenuNeon", audioController.GetClipRelevantVolume("MenuNeon")));
+
+
+        starter.Play();
+       
         #endregion
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (eventSystem.GetComponent<EventSystem>().currentSelectedGameObject == null) {
-            eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(current);
-        }
-
-
-        if (Input.GetKeyDown(KeyCode.Backspace) || Input.GetKeyDown(KeyCode.Escape)) {
-            ComeBack();
-        }
-
-        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+        if (!isRestricted)
         {
-            #region butIndexPlus
-            current.GetComponent<MenuLevel>().buttonIndex = 
-                (current.GetComponent<MenuLevel>().buttonIndex + 1) % current.transform.childCount;
-            #endregion
-        }
+            if (eventSystem.GetComponent<EventSystem>().currentSelectedGameObject == null)
+            {
+                eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(current);
+            }
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
-        {
-            #region butIndexMinus
-            current.GetComponent<MenuLevel>().buttonIndex = 
-                (current.GetComponent<MenuLevel>().buttonIndex - 1 + current.transform.childCount) % current.transform.childCount;
-            #endregion
+            if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S) ||
+                Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                StartCoroutine(audioController.Play("SelectButton"));
+
+            }
+
+            if (Input.GetKeyDown(KeyCode.Backspace) || Input.GetKeyDown(KeyCode.Escape))
+            {
+                StartCoroutine(audioController.Play("SelectButton"));
+
+                ComeBack();
+            }
+
+            if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+            {
+                StartCoroutine(audioController.Play("SelectButton"));
+                #region butIndexPlus
+                current.GetComponent<MenuLevel>().buttonIndex =
+                    (current.GetComponent<MenuLevel>().buttonIndex + 1) % current.transform.childCount;
+                #endregion
+            }
+
+            if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
+            {
+                StartCoroutine(audioController.Play("SelectButton"));
+                #region butIndexMinus
+                current.GetComponent<MenuLevel>().buttonIndex =
+                    (current.GetComponent<MenuLevel>().buttonIndex - 1 + current.transform.childCount) % current.transform.childCount;
+                #endregion
+            }
         }
     }
 
     public void OpenPanel(GameObject obj) {
-        current.SetActive(false);
-        current = obj;
-        current.SetActive(true);
-        eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(current.transform.
-            GetChild(current.GetComponent<MenuLevel>().buttonIndex).gameObject);
+        if (!isRestricted) {
+            current.SetActive(false);
+            current = obj;
+            current.SetActive(true);
+            eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(current.transform.
+                GetChild(current.GetComponent<MenuLevel>().buttonIndex).gameObject);
+        }
     }
 
     public void ComeBack() {
-        if (current.GetComponent<MenuLevel>().parent != null)
+        if (!isRestricted)
         {
-            current.GetComponent<MenuLevel>().buttonIndex = 0;
-            OpenPanel(current.GetComponent<MenuLevel>().parent);
+            if (current.GetComponent<MenuLevel>().parent != null)
+            {
+                current.GetComponent<MenuLevel>().buttonIndex = 0;
+                OpenPanel(current.GetComponent<MenuLevel>().parent);
+            }
         }
     } 
 
     public void QuitGame() {
-        Application.Quit();
+        if (!isRestricted)
+        {
+            Application.Quit();
+        }
     }
 
-    public void Play() {
-        StartCoroutine(PlayGame());
+    public void Play(int buildIndex) {
+        if (!isRestricted)
+        {
+            if (current.gameObject.name == "PlayMenu")
+            {
+                StartCoroutine(audioController.Stop("BackGround", 5.5f, 1f));
+                StartCoroutine(audioController.Stop("MenuNeon", 5.5f, 1));
+            }
+            else if (current.gameObject.name == "SelectLevelMenu") {
+                StartCoroutine(audioController.Stop("BackGround", (float)fader.duration - 1.2f));
+                StartCoroutine(audioController.Stop("MenuNeon", (float)fader.duration - 1.2f));
+            }
+            StartCoroutine(PlayGame(buildIndex));
+        }
     }
 
 
-    IEnumerator PlayGame()
+    IEnumerator PlayGame(int buildIndex)
     {
-        fader.Play();
-        yield return new WaitForSecondsRealtime(7.29f);
-        blueMoon.Play();
-        yield return new WaitForSecondsRealtime(5f);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        isRestricted = true;
+        if (current.gameObject.name == "PlayMenu")
+        {
+            fader.Play();
+            yield return new WaitForSecondsRealtime((float)fader.duration);
+
+            blueMoonDirector.Play();
+            yield return new WaitForSecondsRealtime((float)blueMoonDirector.duration);
+        }
+        else if (current.gameObject.name == "SelectLevelMenu")
+        {
+            current.gameObject.SetActive(false);
+            fader.Play();
+            yield return new WaitForSecondsRealtime((float)fader.duration - 1.2f);
+        }
+        StartCoroutine(audioController.turnOffSound(buildIndex));
+        SceneManager.LoadScene(buildIndex);
+
+    }
+
+    IEnumerator activate(float offset) {
+        yield return new WaitForSecondsRealtime(offset);
+        isRestricted = false;
     }
 }

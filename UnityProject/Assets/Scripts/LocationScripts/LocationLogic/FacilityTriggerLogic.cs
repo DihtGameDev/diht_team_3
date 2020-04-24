@@ -5,112 +5,47 @@ using UnityEngine.Experimental.Rendering.Universal;
 
 public class FacilityTriggerLogic : MonoBehaviour
 {
-    public bool isActive;
-    public bool isNeedToStart = false;
-    public float start_intensity = 0.7f;
+    private MarshallController marshallController;
 
     public GameObject facility;
     public GameObject facility_next;
-    public FacilityTriggerLogic trigger_next;
 
-    public GameObject facility_previous;
-    public FacilityTriggerLogic trigger_previous;
     public Light2D facilityLight;
 
-    public bool isEnter;
-    public bool isExit;
-
-    void Awake()
+    private void Awake()
     {
-        if (this.gameObject.name == "EnterFacilityTrigger")
-        {
-            isEnter = true;
-            
-        }
-        else if (this.gameObject.name == "ExitFacilityTrigger") {
-            isExit = true;
-        }
-        StartCoroutine(start(0.3f));
-
+        marshallController = GameObject.FindGameObjectWithTag("Marshall").gameObject.GetComponent<MarshallController>();
     }
-
-    // Update is called once per frame
     void Update()
     {
-        if (isNeedToStart) {
-            isNeedToStart = false;
-            StartCoroutine(WaitAndStartFacility(2f));
-        }
-
+        facilityLight = facility.GetComponent<FacilityLogic>().facilityLight;
     }
-
 
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Marshall")) {
-            if (facility.transform.FindChild("Enemies").gameObject.activeSelf) { 
-            StartCoroutine(WaitAndFadeFacility(2f));
-            
-            }
+          
+            StartCoroutine(WaitAndFadeFacility(3f));
         }
     }
 
-    IEnumerator WaitAndFadeFacility(float speed) {
+    IEnumerator WaitAndFadeFacility(float time) {
 
-        if (isEnter && facility_previous != null)
-        {
-            facility_previous.transform.FindChild("Enemies").gameObject.SetActive(true);
-            trigger_previous.isNeedToStart = true;
-        }
-        else if (isExit && facility_next != null)
-        {
-            facility_next.transform.FindChild("Enemies").gameObject.SetActive(true);
-            trigger_next.isNeedToStart = true;
-        }
-        
 
-        while (facilityLight.intensity > 0.105f) {
-            facilityLight.intensity = Mathf.Lerp(facilityLight.intensity, 0.1f, speed * Time.deltaTime);
-            
-            yield return null;
-        }
-        StartCoroutine(turnOfEnemies(15f));
-
-    }
-
-    public IEnumerator WaitAndStartFacility(float speed) {
-
-        facilityLight.intensity = 0.1f;
-        while (facilityLight.intensity < 0.7f - 0.01f)
-        {
-            facilityLight.intensity = Mathf.Lerp(facilityLight.intensity, 0.7f, speed * Time.deltaTime);
-            yield return null;
-        }
-
-        Debug.Log("Shine");
-    }
-
-    IEnumerator start(float time)
-    {
-        yield return new WaitForSecondsRealtime(time);
-        if (!isActive) {
-            facility.transform.FindChild("Enemies").gameObject.SetActive(false);
-        }
-        
-
-        Debug.Log("Shine");
-    }
-
-    IEnumerator turnOfEnemies(float time)// иначе остаются корутины
-    {
-        yield return new WaitForSecondsRealtime(time);
         facility.transform.FindChild("Enemies").gameObject.SetActive(false);
+        marshallController.number_of_rushers = 0; 
+
+        facility_next.SetActive(true);
+        float start_intencity = facilityLight.intensity;
+        for (int i = 0; i < 30; i++)
+        {
+            facilityLight.intensity -= start_intencity / 30f;
+            yield return new WaitForSecondsRealtime(time / 30f);
+        }
+        Destroy(facility.gameObject);
 
 
-        Debug.Log("Shine");
     }
-
-
 
 }
 

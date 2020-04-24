@@ -34,14 +34,18 @@ public class DialogeTriggerHospital2 : MonoBehaviour
         marshallController = marshall.GetComponent<MarshallController>();
         cameraController = camera.GetComponent<CameraScript>();
 
+        dController = FindObjectOfType<DialogeController>();
         TriggerDialoge();
+
+        dialoge.sentences[0] = "Press " + Global.sitDown.ToString() + " to bend down";
     }
 
     // Update is called once per frame
     void Update()
     {
  
-        if (Input.GetKeyDown(KeyCode.LeftShift) && dController.pointer == 2) {
+        if (Input.GetKeyDown(Global.sitDown) && dController.pointer == 2) {
+            
             StartCoroutine(Close(0.1f));
             StartCoroutine(comeBack());
         }
@@ -50,17 +54,18 @@ public class DialogeTriggerHospital2 : MonoBehaviour
 
             StartCoroutine(Display(0.05f));
         }
-        if (marshall.transform.position.x >= 7.3f && dController.pointer == 4)
+        if (marshall.transform.position.x >= 7.5f && dController.pointer == 6)
 
         {
             StartCoroutine(Close(0.05f));
         }
 
+        dialoge.sentences[0] = "Press " + Global.sitDown.ToString() + " to bend down";
     }
 
     public void TriggerDialoge()
     {
-        Debug.Log("Trig");
+
         dController.StartDialoge(dialoge);
     }
 
@@ -68,16 +73,17 @@ public class DialogeTriggerHospital2 : MonoBehaviour
     {
         dController.pointer++;
         yield return new WaitForSecondsRealtime(time);
-        Debug.Log("TrigDisplay");
+
         dController.DisplayNextSentence();
     }
 
-    IEnumerator Close(float time)
+    IEnumerator Close(float time, bool skipAllowed = false)
     {
-        yield return new WaitForSecondsRealtime(time);
-        Debug.Log("TrigClose");
-        dController.CloseSentence();
+        dController.pointer++;
+        StartCoroutine(dController.CloseSentence(time, skipAllowed));
+        yield return null;
     }
+
 
 
     IEnumerator attention() {
@@ -88,7 +94,7 @@ public class DialogeTriggerHospital2 : MonoBehaviour
         while (Vector2.Distance(camera.transform.position, enemy.transform.position) >= 0.2f) {
 
             camera.transform.position = Vector3.MoveTowards(camera.transform.position,
-                new Vector3(enemy.transform.position.x, enemy.transform.position.y, cameraController.camera_Offset), 0.1f);
+                new Vector3(enemy.transform.position.x, enemy.transform.position.y, cameraController.camera_Offset), 1f * Time.timeScale);
             yield return null;
         }
     }
@@ -100,7 +106,7 @@ public class DialogeTriggerHospital2 : MonoBehaviour
         while (Vector3.Distance(camera.transform.position, cameraPosition) >= 0.1f)
         {
             camera.transform.position = Vector3.MoveTowards(camera.transform.position,
-                cameraPosition, 0.15f);
+                cameraPosition, 0.15f * Time.timeScale);
             yield return null;
         }
 
@@ -113,6 +119,7 @@ public class DialogeTriggerHospital2 : MonoBehaviour
         {
             if (start == false) {
                 start = true;
+                TriggerDialoge();
                 StartCoroutine(Display(0.1f));
                 StartCoroutine(attention());
             }

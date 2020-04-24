@@ -5,7 +5,7 @@ using Pathfinding;
 
 public class HospitalNurseController : MonoBehaviour
 {
- 
+
     [HideInInspector]
     public float height;
 
@@ -14,14 +14,23 @@ public class HospitalNurseController : MonoBehaviour
 
     private VisualDetecterController visualDetecter;
 
+    private SpriteRenderer alarm1;
+    private SpriteRenderer alarm2;
+    private SpriteRenderer alarm3;
 
-  //  [SerializeField]
+    public Sprite question;
+    public Sprite exclamation;
+
+    private SpriteRenderer enemySprite;
+
+
+    //  [SerializeField]
     private float maxTimeOfChasing;
-   // [SerializeField]
+    // [SerializeField]
     private float currentTimeOfChasing;
 
     private AIPath pathfinder;
-   
+
     [SerializeField]
     private bool isCameToTarget; // не знает куда идти
     [SerializeField]
@@ -43,19 +52,21 @@ public class HospitalNurseController : MonoBehaviour
     {  // кто то рядом выключает или включает свет
         public bool isTriggerOnTheLight;
         public GameObject light;
-        public LightTrigger(bool b, GameObject l = null) {
+        public LightTrigger(bool b, GameObject l = null)
+        {
             isTriggerOnTheLight = b;
             light = l;
         }
     }
     [SerializeField]
     public LightTrigger lightTrigger = new LightTrigger(false);
-    
-    
+
+
     [SerializeField]
     private bool isCalm; // враг спокоен
     [SerializeField]
     private bool isWanderingOnLight;
+    public float wanderingTimer = 0f;
     [SerializeField]
     private bool isWandering; //враг сейчас тебя заметит и есть время чтобы спрятаться
     [SerializeField]
@@ -70,9 +81,9 @@ public class HospitalNurseController : MonoBehaviour
     private bool hasEverNoticed; // замечал ли враг вообще
 
     //TIMINGS
-    
+
     private float seriosnessOfAnxiety; //насколько увеличивается опасность обнаружения если не успокоился
-    
+
     private float influence_of_distance_on_Wander; //как сильно расстояние влияет на скорость обнаружения
 
     private float timeOfWandering; // время чтобы когда можно спрятаться
@@ -91,7 +102,7 @@ public class HospitalNurseController : MonoBehaviour
     private float timeOfCalming; // время успокоения после того как заметили
 
     //ANIMATION
-    Animator alarmAnimator;
+
     Animator anim;
 
     public bool isLookingRight;
@@ -102,10 +113,23 @@ public class HospitalNurseController : MonoBehaviour
     private int pointerOfDefMove = 0;
     public float _waitingOnDefaultPoint = 0f;
 
+    [SerializeField]
+    private AudioController audioController;
     // Start is called before the first frame update
     void Start()
     {
-        if (defaultTrajectory.Count == 0) {
+        audioController = Global.audioController;
+
+        alarm1 = transform.FindChild("Alarm").transform.GetChild(0).GetComponent<SpriteRenderer>();
+        alarm2 = transform.FindChild("Alarm").transform.GetChild(1).GetComponent<SpriteRenderer>();
+        alarm3 = transform.FindChild("Alarm").transform.GetChild(2).GetComponent<SpriteRenderer>();
+
+        alarm1.material.SetFloat("_Fill", 0.0f);
+        alarm2.material.SetFloat("_Fill", 0.0f);
+        alarm3.material.SetFloat("_Fill", 0.0f);
+
+        if (defaultTrajectory.Count == 0)
+        {
             defaultTrajectory.Add(transform.position);
         }
 
@@ -113,16 +137,17 @@ public class HospitalNurseController : MonoBehaviour
             defaultTrajectory[i] += new Vector2(transform.parent.position.x, transform.parent.position.y);
         }*/
         target = defaultTrajectory[0];
-        
+
         //Default VARIABLES
         marshall = GameObject.FindGameObjectWithTag("Marshall").gameObject;
         marshallController = marshall.GetComponent<MarshallController>();
 
         visualDetecter = transform.Find("VisualDetecter").transform.GetComponent<VisualDetecterController>();
         isMarshallVisible = visualDetecter.GetComponent<VisualDetecterController>().isMashallVisible;
-        alarmAnimator = transform.Find("Alarm").GetComponent<Animator>();
+
         anim = GetComponent<Animator>();
         anim.SetBool("isRight", isLookingRight);
+        enemySprite = transform.Find("EnemyRenderer").transform.GetComponent<SpriteRenderer>();
 
         pathfinder = GetComponent<AIPath>();
 
@@ -145,59 +170,33 @@ public class HospitalNurseController : MonoBehaviour
         height = 0f;
 
         walkSpeed = 1.2f;
-        runSpeed = 2.4f;
+        runSpeed = 2.5f;
         speed = walkSpeed;
 
         maxTimeOfChasing = 10f;
-      
-        seriosnessOfAnxiety = 3f; 
+
+        seriosnessOfAnxiety = 3f;
         influence_of_distance_on_Wander = 6f;
 
-        changable_timeOfCalming = 6f;
-        changable_timeOfEasyCalming = 2f;
+        changable_timeOfCalming = 7f;
         changable_timeOfWandering = 3f;
-
         changable_timeOfLightWandering = 4f;
 
         timeOfPatheringAfterDisappear = 1f;
-
-        timeOfWandering = findAnimationClip(alarmAnimator.runtimeAnimatorController.animationClips, "Wander").length;
-        timeOfAnxiousWandering = findAnimationClip(alarmAnimator.runtimeAnimatorController.animationClips, "Wander").length / seriosnessOfAnxiety;
-        timeOfEasyCalming = findAnimationClip(alarmAnimator.runtimeAnimatorController.animationClips, "Anxious").length;
-        timeOfCalming = findAnimationClip(alarmAnimator.runtimeAnimatorController.animationClips, "veryAnxious").length;
-        timeOfLightWandering = findAnimationClip(alarmAnimator.runtimeAnimatorController.animationClips, "Wander").length;
 
     }
 
     // Update is called once per frame
     void FixedUpdate()
-    {   
+    {
 
         cur_timeOfWandering = Vector2.Distance(transform.position, marshall.transform.position) * changable_timeOfWandering / influence_of_distance_on_Wander;
         cur_timeOfAnxiousWandering = cur_timeOfWandering / seriosnessOfAnxiety;
-        if (lightTrigger.isTriggerOnTheLight) {
+        if (lightTrigger.isTriggerOnTheLight)
+        {
             cur_timeOfLightWandering = Vector2.Distance(transform.position, lightTrigger.light.transform.position) * changable_timeOfLightWandering / influence_of_distance_on_Wander;
         }
 
-        //SPEEDING THE ANIMATION
-        if (isWandering)
-        {
-            alarmAnimator.speed = timeOfWandering / cur_timeOfWandering;
-        }
-        else if (lightTrigger.isTriggerOnTheLight){
-            alarmAnimator.speed = timeOfLightWandering / cur_timeOfLightWandering;
-        }
-        else if (isVeryAnxious)
-        {
-            alarmAnimator.speed = timeOfCalming / changable_timeOfCalming;
-        }
-        else if (isAnxious)
-        {
-            alarmAnimator.speed = timeOfEasyCalming / changable_timeOfEasyCalming;
-        }
-        else {
-            alarmAnimator.speed = 1f;
-        }
 
         //DETECTING MARSHALL
         isMarshallVisible = visualDetecter.isMashallVisible;
@@ -212,68 +211,68 @@ public class HospitalNurseController : MonoBehaviour
         }
 
 
-        if (isMarshallVisible)
-        {         
-            if (isCalm) {
-                StopAllCoroutines();
-                isCalm = false;
-                isWandering = true;
-                StartCoroutine(wander());
-            }
-            if (isAnxious) {
-                StopAllCoroutines();
-                isAnxious = false;
-                isWandering = true;
-                StartCoroutine(anxiousWander());
-            }
-            if (isVeryAnxious || isRunningToPoint) {
-                StopAllCoroutines();
-                isVeryAnxious = false;
-                isRunningToPoint = false;
-                marshallController.number_of_rushers++;
-              
-                isNeedToRush = true;         
-            }
+        if (isMarshallVisible && isCalm && !marshallController.isChasable)
+        {
+            isCalm = false;
+            isWandering = true;
+            StartCoroutine(wander());
         }
-        else {      
-            if (isNeedToRush) {
-                isNeedToRush = false;
-                isRunningToPoint = true;
-                StartCoroutine(run());                
-            }
-   
+        if (isMarshallVisible && marshallController.isChasable && (isCalm || isWandering || isAnxious)) {
+            isCalm = false; 
+            isWandering = false;
+            isAnxious = false;
+
+            isNeedToRush = true;
+            exclam();
+        }
+
+        if (!isMarshallVisible && isNeedToRush)
+        {
+            isNeedToRush = false;
+            isRunningToPoint = true;
+            StartCoroutine(run());
+
         }
         #endregion
 
         //MOVING
         #region moving
         // Default moving (IEnumereator isn't resolved!!!)
-        if (isCameToTarget && (isCalm || isWandering || isAnxious)) {
+        if (isCameToTarget && (isCalm || isWandering || isAnxious))
+        {
             if (_waitingOnDefaultPoint > waitingOnDefaultPoint)
             {
                 _waitingOnDefaultPoint = 0;
                 target = defaultTrajectory[pointerOfDefMove % defaultTrajectory.Count];
                 pointerOfDefMove++;
             }
-            else {
+            else
+            {
                 _waitingOnDefaultPoint += Time.deltaTime;
             }
 
-        
+
         }
         //Defining the target to move, speed and area of viewing
         if (isNeedToRush)
-        {          
+        {
             target = marshall.transform.position;
         }
 
         if (isNeedToRush || isRunningToPoint)
         {
             speed = runSpeed;
+        }
+        else
+        {
+            speed = walkSpeed;
+        }
+
+        if (isNeedToRush || isRunningToPoint || isVeryAnxious)
+        {
             visualDetecter.distanceOfViewing = visualDetecter.angryDistanceOfViewing;
         }
         else {
-            speed = walkSpeed;
             visualDetecter.distanceOfViewing = visualDetecter.calmDistanceOfViewing;
         }
 
@@ -281,219 +280,293 @@ public class HospitalNurseController : MonoBehaviour
         pathfinder.maxSpeed = speed;
 
         //Conditions of coming to target
-        if (Vector2.Distance(transform.position, target) < pathfinder.endReachedDistance + 0.4f)
+        if (Vector2.Distance(transform.position, target) < pathfinder.endReachedDistance + 0.3f)
         {
             pathfinder.canSearch = false;
             isCameToTarget = true;
-            anim.SetBool("isMoving", false);
+         
         }
-        else {
+        else
+        {
             pathfinder.canSearch = true;
             isCameToTarget = false;
             anim.SetBool("isMoving", true);
-      
         }
 
-        if (Vector2.Distance(marshall.transform.position, this.transform.position) < 0.6f) {
+        if (Vector2.Distance(marshall.transform.position, this.transform.position) < 0.6f)
+        {
             marshallController.isCaptured = true;
+            StartCoroutine(glitch(0.4f));
         }
         #endregion
 
         //ANIMATION
         #region animation
 
-        anim.speed = speed / walkSpeed;
 
-        if (pathfinder.velocity.x > 0.0001f)
+        anim.speed = pathfinder.velocity.magnitude/ walkSpeed;
+
+        if (pathfinder.velocity.x > 0.001f)
         {
             anim.SetBool("isRight", true);
         }
-        else if (pathfinder.velocity.x < -0.0001f)
+        else if (pathfinder.velocity.x < -0.001f)
         {
             anim.SetBool("isRight", false);
         }
 
-        if (isCalm)
+        if (pathfinder.velocity.magnitude > 0.1f)
         {
-            alarmAnimator.SetBool("isCalm", true);
+            anim.SetBool("isMoving", true);
         }
-        else { alarmAnimator.SetBool("isCalm", false); }
-        if (isWandering || isWanderingOnLight)
-        {
-            alarmAnimator.SetBool("isWander", true);
+        else {
+            anim.SetBool("isMoving", false);
         }
-        else { alarmAnimator.SetBool("isWander", false); }
-        if (isAnxious)
-        {
-            alarmAnimator.SetBool("isAnxious", true);
-        }
-        else { alarmAnimator.SetBool("isAnxious", false); }
-        if (isNeedToRush)
-        {
-            alarmAnimator.SetBool("isNeedToRush", true);
-        }
-        else { alarmAnimator.SetBool("isNeedToRush", false); }
-        if (isRunningToPoint)
-        {
-            alarmAnimator.SetBool("isRunToPoint", true);
-        }
-        else { alarmAnimator.SetBool("isRunToPoint", false); }
 
-        if (isVeryAnxious)
-        {
-            alarmAnimator.SetBool("isVeryAnxious", true);
+        if (isCalm && isCameToTarget && defaultTrajectory.Count == 1) {
+            anim.SetBool("isRight", isLookingRight);
         }
-        else { alarmAnimator.SetBool("isVeryAnxious", false); }
 
-        
         #endregion
     }
 
-    #region detectingTimingIEnunerators
+    #region detectingTimingIEnumerators
 
-    
+
     IEnumerator lightWandering(float time)
     {
-        float timer = 0f;
+        StartCoroutine(glitch(0.18f));
 
-        while (timer < time)
+        wanderingTimer = time;
+
+        while (wanderingTimer > 0f)
         {
-            if (isMarshallVisible) {
+
+            wanderingTimer -= Time.deltaTime;
+
+            filling(wanderingTimer / time);
+
+            if (isMarshallVisible)
+            {
                 isWanderingOnLight = false;
-                
-                isNeedToRush = true;
-                hasEverNoticed = true;
-                marshallController.number_of_rushers++;
-                yield return 0;
+
+                isWandering = true;
+                StartCoroutine(wander());
+                yield break;
             }
-            if (lightTrigger.isTriggerOnTheLight) {
+            if (lightTrigger.isTriggerOnTheLight)
+            {
+                StartCoroutine(glitch(0.21f));
+
                 lightTrigger.isTriggerOnTheLight = false;
-                timer = -time;
-              
-                target = lightTrigger.light.transform.position;
+
+
+                target = new Vector2(lightTrigger.light.transform.position.x, lightTrigger.light.transform.position.y -
+                    TriggerLogic.wallHigh);
+                isCameToTarget = false;
+                wanderingTimer = time;
+                filling(1f);
+
+                while (!isCameToTarget) {
+                    wanderingTimer = time;
+                    yield return null;
+                }
+
+
             }
-            timer += Time.deltaTime;
-         
+
             yield return null;
         }
         isWanderingOnLight = false;
 
-        isAnxious = true;
-        StartCoroutine(easyCalmDown(time));
+        isCalm = true;
     }
 
     IEnumerator wander()
     {
-        float timer = 0f;
-        
-        while (timer < cur_timeOfWandering) {
-           
-            timer += Time.deltaTime;
-           
+        StartCoroutine(glitch(0.24f));
+        while (wanderingTimer < cur_timeOfWandering)
+        {
+
+            wanderingTimer += Time.deltaTime;
+
+            filling(0.5f * wanderingTimer / cur_timeOfWandering + 0.5f);
+
+
+            if (lightTrigger.isTriggerOnTheLight)
+            {
+                StartCoroutine(glitch(0.21f));
+                lightTrigger.isTriggerOnTheLight = false;
+
+                wanderingTimer += (0.3f * wanderingTimer);
+            }
+
+            if (!isMarshallVisible)
+            {
+                isWandering = false;
+
+                isAnxious = true;
+                StartCoroutine(easyCalmDown());
+                yield break;
+            }
+
             yield return null;
         }
-       
+
         isWandering = false;
 
-        if (isMarshallVisible)
-        {
-       
-            isNeedToRush = true;
+        isNeedToRush = true;
+        exclam();
+        
 
-            hasEverNoticed = true;
-            marshallController.number_of_rushers++;
-        }
-        else {
-            isAnxious = true;
-            StartCoroutine(easyCalmDown(changable_timeOfEasyCalming));
-        }        
+        hasEverNoticed = true;
+        marshallController.number_of_rushers++;
     }
 
-    IEnumerator anxiousWander()
+    IEnumerator easyCalmDown()
     {
-        float timer = 0f;
-        
-        while (timer < cur_timeOfAnxiousWandering)
+        while (wanderingTimer > 0)
         {
-           
-            timer += Time.deltaTime;
-           
+            wanderingTimer -= Time.deltaTime / seriosnessOfAnxiety;
+
+            filling(0.5f * wanderingTimer / cur_timeOfWandering + 0.5f);
+
+            if (lightTrigger.isTriggerOnTheLight)
+            {
+                StartCoroutine(glitch(0.21f));
+                lightTrigger.isTriggerOnTheLight = false;
+
+                wanderingTimer = cur_timeOfWandering;
+            }
+
+            if (isMarshallVisible)
+            {
+                isAnxious = false;
+
+                isWandering = true;
+                StartCoroutine(wander());
+                yield break;
+            }
+
             yield return null;
         }
-        isWandering = false;
-
-        if (isMarshallVisible)
-        {
-        
-            isNeedToRush = true;
-
-            marshallController.number_of_rushers++;
-        }
-        else
-        {
-            isAnxious = true;
-            StartCoroutine(easyCalmDown(changable_timeOfEasyCalming));
-        }
+        isAnxious = false;
+        filling(0f);
+        isCalm = true;
     }
+
 
     IEnumerator calmDown(float time)
     {
+        float timer = time;
+        while (timer > 0f)
+        {
+            timer -= Time.deltaTime;
+            filling(timer / time);
 
-        isVeryAnxious = true;
-        yield return new WaitForSeconds(time);
+
+            if (isMarshallVisible)
+            {
+                isVeryAnxious = false;
+                filling(1f);
+                isNeedToRush = true;
+                
+
+                yield break;
+            }
+            yield return null;
+        }
+
+
         isVeryAnxious = false;
+        filling(1f);
+        quest();
 
         isAnxious = true;
 
         marshallController.number_of_rushers--;
 
-        StartCoroutine(easyCalmDown(changable_timeOfEasyCalming));
-
-      
+        StartCoroutine(easyCalmDown());
     }
 
     IEnumerator run()
     {
         StartCoroutine(leftOverPathering(timeOfPatheringAfterDisappear));
 
-        while (!isCameToTarget) {
+        while (!isCameToTarget)
+        {
+            if (isMarshallVisible)
+            {
+                isRunningToPoint = false;
+
+                isNeedToRush = true;
+
+                yield break;
+            }
+
             yield return null;
         }
 
         isRunningToPoint = false;
+
+        isVeryAnxious = true;
         StartCoroutine(calmDown(changable_timeOfCalming));
 
     }
 
-    IEnumerator easyCalmDown(float time)
+    IEnumerator leftOverPathering(float time)
     {
-        yield return new WaitForSeconds(time);
-
-        isAnxious = false;
-
-
-        isCalm = true;
-    }
-
-   
-
-    IEnumerator leftOverPathering(float time) {
-        while (time > 0) {
+        while (time > 0)
+        {
 
             target = marshall.transform.position;
             time -= Time.deltaTime;
             yield return null;
-        }       
+        }
     }
     #endregion
 
 
-    private AnimationClip findAnimationClip(AnimationClip[] array, string findName) {
-        foreach (var obj in array) {
-            if (obj.name == findName) {
+    private AnimationClip findAnimationClip(AnimationClip[] array, string findName)
+    {
+        foreach (var obj in array)
+        {
+            if (obj.name == findName)
+            {
                 return obj;
             }
         }
         return null;
+    }
+
+    public void exclam()
+    {
+        alarm1.sprite = exclamation;
+        alarm2.sprite = exclamation;
+        alarm3.sprite = exclamation;
+    }
+    public void quest()
+    {
+        alarm1.sprite = question;
+        alarm2.sprite = question;
+        alarm3.sprite = question;
+
+    }
+    public void filling(float fill)
+    {
+        alarm1.material.SetFloat("_Fill", fill);
+        alarm2.material.SetFloat("_Fill", fill);
+        alarm3.material.SetFloat("_Fill", fill);
+
+    }
+
+    IEnumerator glitch(float time) {
+        StartCoroutine(audioController.Play("Alarm"));
+        enemySprite.material.SetVector("_Glitch", new Vector4(0f, 0.3f, 0f, 0f));
+        enemySprite.material.SetFloat("_GlitchOffset", 0.18f);
+        yield return new WaitForSeconds(time);
+        enemySprite.material.SetFloat("_GlitchOffset", -0.05f);
+        enemySprite.material.SetVector("_Glitch", new Vector4(0f, 0f, 0f, 0f));
+        enemySprite.material.SetFloat("_GlitchOffset", 0.15f);
     }
 }

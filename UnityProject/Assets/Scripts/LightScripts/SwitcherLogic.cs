@@ -29,6 +29,9 @@ public class SwitcherLogic : MonoBehaviour
 
     public bool isOnArea = false;
 
+    [SerializeField]
+    private AudioController audioController;
+
     // Start is called beforeihe first frame update
     void Start()
     {
@@ -43,17 +46,20 @@ public class SwitcherLogic : MonoBehaviour
         startColor = renderer.color;
         triggerColor = Color.white;
         start_intensity = lighter.intensity;
+
+        audioController = GameObject.Find("AudioManager").gameObject.GetComponent<AudioController>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.Space) && isOnClickArea && isAlloedToPress
-            && !marshallController.isRestricted) {
-
+        if (Input.GetKeyDown(Global.action) && isOnClickArea && isAlloedToPress
+            && !marshallController.isRestricted && Time.timeScale != 0f) {
             lightController.isShine = !lightController.isShine;
-            StopAllCoroutines();
+            //StopAllCoroutines();
+            StartCoroutine(audioController.Play("LightSwitch"));
             StartCoroutine(buttonChangeColor());
             lighter.intensity = lightController.isShine ? start_intensity : 0f;
             lighter.gameObject.GetComponent<TriggerLogic>().isTrigger = true;
@@ -91,7 +97,7 @@ public class SwitcherLogic : MonoBehaviour
         }
     }
 
-    IEnumerator lightSignal() {
+     public IEnumerator lightSignal() {
         float start_intensity = lighter.intensity;
         lighter.GetComponent<LightController>().isSignalizeToPlayer = true;
         for (int i = 0; i < 2; i++)

@@ -5,7 +5,7 @@ using UnityEngine;
 public class TriggerLogic : MonoBehaviour
 {
     public bool isProblemLight;
-    private float wallHigh = 1.3f;
+    public static float wallHigh = 1.3f;
     public bool isTrigger = false;
 
     public float distanceOfTriggering;
@@ -19,16 +19,7 @@ public class TriggerLogic : MonoBehaviour
     {
         distanceOfTriggering = 8f;
 
-        
-        foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemy"))
-        {
-            GameObject newObj = Instantiate(checker, 
-                new Vector2(transform.position.x, transform.position.y - wallHigh), Quaternion.identity);
-            newObj.AddComponent<Checker>();
-            newObj.GetComponent<Checker>().target = enemy;
-            newObj.GetComponent<Checker>().parent = this.gameObject;
-            checkersStates.Add(newObj);
-        }
+        StartCoroutine(findEnemies(2f));
 
     }
 
@@ -46,6 +37,21 @@ public class TriggerLogic : MonoBehaviour
                         GetComponent<HospitalNurseController>().lightTrigger.light = transform.gameObject;
                 }
             }
+        }
+    }
+
+    IEnumerator findEnemies(float offset) {
+        yield return new WaitForSecondsRealtime(offset);
+
+        foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemy"))
+        {
+            GameObject newObj = Instantiate(checker,
+            new Vector2(transform.position.x, transform.position.y - wallHigh), Quaternion.identity);
+            newObj.AddComponent<Checker>();
+            newObj.GetComponent<Checker>().target = enemy;
+            newObj.GetComponent<Checker>().parent = this.gameObject;
+            checkersStates.Add(newObj);
+
         }
     }
 

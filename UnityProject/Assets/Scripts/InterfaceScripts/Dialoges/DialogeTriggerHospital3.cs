@@ -37,7 +37,10 @@ public class DialogeTriggerHospital3 : MonoBehaviour
         marshallController = marshall.GetComponent<MarshallController>();
         cameraController = camera.GetComponent<CameraScript>();
 
+        dController = FindObjectOfType<DialogeController>();
         TriggerDialoge();
+
+        dialoge.sentences[0] = "Press " + Global.action.ToString() + " to switch off the light";
     }
 
 
@@ -48,7 +51,9 @@ public class DialogeTriggerHospital3 : MonoBehaviour
         if (dController.pointer == 2) {
             marshallController.isRestricted = false;
         }
-      
+
+        dialoge.sentences[0] = "Press " + Global.action.ToString() + " to switch off the light";
+
     }
 
     public void TriggerDialoge()
@@ -61,27 +66,32 @@ public class DialogeTriggerHospital3 : MonoBehaviour
     {
         dController.pointer++;
         yield return new WaitForSecondsRealtime(time);
-        Debug.Log("TrigDisplay");
+
         dController.DisplayNextSentence();
     }
 
-    IEnumerator Close(float time)
+    IEnumerator Close(float time, bool skipAllowed = false)
     {
-        yield return new WaitForSecondsRealtime(time);
-        Debug.Log("TrigClose");
-        dController.CloseSentence();
+        dController.pointer++;
+        StartCoroutine(dController.CloseSentence(time, skipAllowed));
+        yield return null;
     }
+
 
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Marshall"))
         {
+
             if (start == false)
             {
                 start = true;
+
+                StartCoroutine(switcher.lightSignal());
+                TriggerDialoge();
                 StartCoroutine(Display(0f));
                 marshallController.isRestricted = true;
-                StartCoroutine(attention(light, 1.2f, 0.08f));
+                StartCoroutine(attention(light, 1.2f, 0.3f));
             }        
         }
     }
@@ -90,10 +100,10 @@ public class DialogeTriggerHospital3 : MonoBehaviour
     {
         if (other.CompareTag("Marshall"))
         {
-            if (Input.GetKeyDown(KeyCode.Space) && dController.pointer == 2 && switcher.isAlloedToPress)
-            {
+            if (Input.GetKeyDown(Global.action) && dController.pointer == 2 && switcher.isAlloedToPress)
+            {            
                 StartCoroutine(Display(0.0f));
-                StartCoroutine(attention(enemy, 2f, 0.08f));
+                StartCoroutine(attention(enemy, 2f, 0.3f));
             }
         }
     }
@@ -107,7 +117,7 @@ public class DialogeTriggerHospital3 : MonoBehaviour
         while (Vector2.Distance(camera.transform.position, obj.transform.position) >= 0.4f)
         {
             camera.transform.position = Vector3.MoveTowards(camera.transform.position,
-                new Vector3(obj.transform.position.x, obj.transform.position.y, cameraController.camera_Offset), speed);
+                new Vector3(obj.transform.position.x, obj.transform.position.y, cameraController.camera_Offset), speed * Time.timeScale);
             yield return null;
         }
         yield return new WaitForSecondsRealtime(wait_on_obj);
@@ -117,10 +127,10 @@ public class DialogeTriggerHospital3 : MonoBehaviour
     IEnumerator comeBack(float speed)
     {
 
-        while (Vector3.Distance(camera.transform.position, cameraPosition) >= 0.1f)
+        while (Vector3.Distance(camera.transform.position, cameraPosition) >= 0.2f)
         {
             camera.transform.position = Vector3.MoveTowards(camera.transform.position,
-                cameraPosition, speed);
+                cameraPosition, speed * Time.timeScale);
             yield return null;
         }
         if (dController.pointer == 4)

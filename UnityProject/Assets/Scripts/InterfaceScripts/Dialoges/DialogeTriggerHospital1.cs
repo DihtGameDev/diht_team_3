@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 
 public class DialogeTriggerHospital1 : MonoBehaviour
 {
@@ -15,45 +17,62 @@ public class DialogeTriggerHospital1 : MonoBehaviour
     DialogeController dController;
 
     public Dialoge dialoge;
+
+    private AudioController audioController;
     // Start is called before the first frame update
     void Start()
     {
-
+        audioController = GameObject.Find("AudioManager").gameObject.GetComponent<AudioController>();
         dController = FindObjectOfType<DialogeController>();
-
         TriggerDialoge();
 
-        StartCoroutine(Display(1.0f));
+        StartCoroutine(Display(2.0f));
+     
+
+        dialoge.sentences[0] = "Press " + Global.moveUp.ToString();
+        dialoge.sentences[1] = "Press " + Global.moveDown.ToString();
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.W) && dController.pointer == 2)
+        if (Input.GetKeyDown(Global.moveUp) && dController.pointer == 2)
         {
-
+            TriggerDialoge();
             StartCoroutine(Close(0.2f));
+
+        }
+
+        if (dController.pointer == 4)
+        {
             StartCoroutine(Display(0.6f));
         }
 
-        if (Input.GetKeyDown(KeyCode.S) && dController.pointer == 4)
+        if (Input.GetKeyDown(Global.moveDown) && dController.pointer == 6)
         {
-
+            TriggerDialoge();
             StartCoroutine(Close(0.2f));
+        }
+
+        if (dController.pointer == 8)
+        {
             StartCoroutine(Display(0.6f));
         }
 
 
-        if (Vector2.Distance(Input.mousePosition, tmpPosition) > 100f && dController.pointer == 6) {
+        if (Vector2.Distance(Input.mousePosition, tmpPosition) > 100f && dController.pointer == 10) {
 
             isLookedAround = true;
             StartCoroutine(Close(0.3f));
         }
+
+        dialoge.sentences[0] = "Press " + Global.moveUp.ToString();
+        dialoge.sentences[1] = "Press " + Global.moveDown.ToString();
     }
 
     public void TriggerDialoge()
     {
-        Debug.Log("Trig");
         dController.StartDialoge(dialoge);
     }
 
@@ -61,14 +80,15 @@ public class DialogeTriggerHospital1 : MonoBehaviour
     {
         dController.pointer++;
         yield return new WaitForSeconds(time);
-        Debug.Log("TrigDisplay");
+
         dController.DisplayNextSentence();
     }
 
-    IEnumerator Close(float time)
+    IEnumerator Close(float time, bool skipAllowed = false)
     {
-        yield return new WaitForSeconds(time);
-        Debug.Log("TrigClose");
-        dController.CloseSentence();
+        dController.pointer++;
+        StartCoroutine(dController.CloseSentence(time, skipAllowed));
+        yield return null;
     }
+
 }

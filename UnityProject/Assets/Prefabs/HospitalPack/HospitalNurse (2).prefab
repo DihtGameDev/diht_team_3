@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5906196471760402119}
-  - component: {fileID: 5906196471760402113}
   - component: {fileID: 5906196471760402112}
   m_Layer: 5
   m_Name: Alarm
@@ -35,25 +34,6 @@ Transform:
   m_Father: {fileID: 5906196472231538762}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &5906196471760402113
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5906196471760402118}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: fd0890b855e26b245bfffd003d62dac3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!212 &5906196471760402112
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -166,6 +146,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18c2ec194f9f857449460489805a3b8e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isStartDetecting: 1
   isMashallVisible: 0
   numerOfObstacles: 0
   numberOfShelters: 0
@@ -229,7 +210,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 4f2e99b568beef348992563f7eb38e20, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -247,16 +228,16 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 537869909
+  m_SortingLayer: 8
   m_SortingOrder: 0
-  m_Sprite: {fileID: -4041604062673740648, guid: e7eb2241f60610c45b26fd7a39556db6,
+  m_Sprite: {fileID: -5031942344191418343, guid: e7eb2241f60610c45b26fd7a39556db6,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.06, y: 0.09}
+  m_Size: {x: 0.07777778, y: 0.12222222}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -312,7 +293,7 @@ Animator:
   m_GameObject: {fileID: 5906196472231538770}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 696ec249d7ee4744ab2ee5b4eb93e7ba, type: 2}
+  m_Controller: {fileID: 22100000, guid: 825caf6b0c8a99043836562e278d033b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -445,26 +426,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   height: 0
+  question: {fileID: -5031942344191418343, guid: e7eb2241f60610c45b26fd7a39556db6,
+    type: 3}
+  exclamation: {fileID: -521983721737054179, guid: 7f3a996326a2ba84f920d2f07e86b45d,
+    type: 3}
   isCameToTarget: 0
   target: {x: 0, y: 0}
-  defaultPosition: {x: 4, y: 4.3}
-  speed: 0
-  isMarshallVisible: 0
-  isTriggerOnTheLight: 0
   isCalm: 0
+  isWanderingOnLight: 0
+  wanderingTimer: 0
   isWandering: 0
   isAnxious: 0
   isVeryAnxious: 0
   isNeedToRush: 0
   isRunningToPoint: 0
-  hasEverNoticed: 0
-  seriosnessOfAnxiety: 0
-  influence_of_distance_on_Wander: 0
-  changable_timeOfCalming: 0
-  changable_timeOfEasyCalming: 0
-  changable_timeOfWandering: 0
-  timeOfPatheringAfterDisappear: 0
-  isLookingRight: 0
+  isLookingRight: 1
+  defaultTrajectory: []
+  waitingOnDefaultPoint: 1
+  _waitingOnDefaultPoint: 0
 --- !u!114 &5906196472231538764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -529,7 +508,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 4f2e99b568beef348992563f7eb38e20, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -547,16 +526,16 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 537869909
+  m_SortingLayer: 8
   m_SortingOrder: 0
-  m_Sprite: {fileID: -4041604062673740648, guid: e7eb2241f60610c45b26fd7a39556db6,
+  m_Sprite: {fileID: -5031942344191418343, guid: e7eb2241f60610c45b26fd7a39556db6,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.06, y: 0.09}
+  m_Size: {x: 0.07777778, y: 0.12222222}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -611,7 +590,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 4f2e99b568beef348992563f7eb38e20, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -629,16 +608,16 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 537869909
+  m_SortingLayer: 8
   m_SortingOrder: 0
-  m_Sprite: {fileID: -4041604062673740648, guid: e7eb2241f60610c45b26fd7a39556db6,
+  m_Sprite: {fileID: -5031942344191418343, guid: e7eb2241f60610c45b26fd7a39556db6,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.06, y: 0.09}
+  m_Size: {x: 0.07777778, y: 0.12222222}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -693,7 +672,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 25ec9ba2c84f8df47b68953ac3d8ffbb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

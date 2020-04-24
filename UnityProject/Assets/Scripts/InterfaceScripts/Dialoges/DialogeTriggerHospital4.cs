@@ -16,8 +16,9 @@ public class DialogeTriggerHospital4 : MonoBehaviour
 
         TriggerDialoge();
 
-        StartCoroutine(Display(2.5f));
-        StartCoroutine(Close(7f));
+        StartCoroutine(Display(3.5f));
+        dController.isTypingScaled = false;
+        StartCoroutine(Close(8f));
     }
 
 
@@ -41,11 +42,12 @@ public class DialogeTriggerHospital4 : MonoBehaviour
         dController.DisplayNextSentence();
     }
 
-    IEnumerator Close(float time)
+    IEnumerator Close(float time, bool skipAllowed = false)
     {
-        yield return new WaitForSeconds(time);
-        Debug.Log("TrigClose");
-        dController.CloseSentence();
+        dController.pointer++;
+        StartCoroutine(dController.CloseSentence(time, skipAllowed));
+        yield return null;
     }
+
 
 }

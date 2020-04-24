@@ -42,7 +42,10 @@ public class Checker : MonoBehaviour
         }
         else {
             targetIsObserving = false;
-        }       
+        }
+        if (parent == null || target == null) {
+            Destroy(gameObject);
+        }
     }
 
 

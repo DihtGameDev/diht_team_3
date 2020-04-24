@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Experimental.Rendering.Universal;
 
 public class DoorScript : MonoBehaviour
@@ -14,9 +15,13 @@ public class DoorScript : MonoBehaviour
     Vector2 target_position;
     GameObject sprite;
 
+    private AudioController audioController;
+
     Vector2 start_position;// Start is called before the first frame update
     void Start()
     {
+        audioController = GameObject.Find("AudioManager").gameObject.GetComponent<AudioController>();
+
         start_intensity_global = globalLight.intensity;
         globalLight.intensity = 0f;
 
@@ -38,7 +43,10 @@ public class DoorScript : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Marshall") || other.CompareTag("Doctor"))
-        {           
+        {
+            StartCoroutine(audioController.ChangeVolume("SlideDoor", 0.3f));
+            //StartCoroutine(audioController.ChangePitch("SlideDoor", 0.11f));
+            StartCoroutine(audioController.Play("SlideDoor"));
             target_position = new Vector2(start_position.x - 0.3f, start_position.y);
            
             intensivity = 1.65f;
@@ -53,6 +61,9 @@ public class DoorScript : MonoBehaviour
     {
         if (other.CompareTag("Marshall") || other.CompareTag("Doctor"))
         {
+            StartCoroutine(audioController.ChangeVolume("SlideDoor", 0.5f));
+            //StartCoroutine(audioController.ChangePitch("SlideDoor", 0.08f));
+            StartCoroutine(audioController.Play("SlideDoor"));
             target_position = start_position;            
              intensivity = 0f;          
         }

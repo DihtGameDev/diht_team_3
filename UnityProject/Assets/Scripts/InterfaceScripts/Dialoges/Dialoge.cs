@@ -10,5 +10,4 @@ public class Dialoge : MonoBehaviour
     [TextArea(2, 7)]
     public string[] sentences;
 
-   
 }
