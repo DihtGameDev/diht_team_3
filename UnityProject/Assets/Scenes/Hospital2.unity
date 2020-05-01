@@ -2446,6 +2446,7 @@ MonoBehaviour:
   isSitting: 0
   isShined: 0
   shinersCounter: 0
+  cameraController: {fileID: 0}
 --- !u!61 &1780514997391537507
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -8061,6 +8062,11 @@ PrefabInstance:
     - target: {fileID: 1071908954899363828, guid: 085d208c7fee179419166480c3d4264b,
         type: 3}
       propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4096199065013198013, guid: 085d208c7fee179419166480c3d4264b,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

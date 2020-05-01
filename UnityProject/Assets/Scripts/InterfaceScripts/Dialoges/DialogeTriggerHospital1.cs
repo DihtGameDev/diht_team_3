@@ -37,7 +37,7 @@ public class DialogeTriggerHospital1 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(Global.moveUp) && dController.pointer == 2)
+        if (Input.GetKeyDown(Global.moveUp) && Time.timeScale != 0 && dController.pointer == 2)
         {
             TriggerDialoge();
             StartCoroutine(Close(0.2f));
@@ -49,7 +49,7 @@ public class DialogeTriggerHospital1 : MonoBehaviour
             StartCoroutine(Display(0.6f));
         }
 
-        if (Input.GetKeyDown(Global.moveDown) && dController.pointer == 6)
+        if (Input.GetKeyDown(Global.moveDown) && Time.timeScale != 0 && dController.pointer == 6)
         {
             TriggerDialoge();
             StartCoroutine(Close(0.2f));
@@ -61,7 +61,7 @@ public class DialogeTriggerHospital1 : MonoBehaviour
         }
 
 
-        if (Vector2.Distance(Input.mousePosition, tmpPosition) > 100f && dController.pointer == 10) {
+        if (Vector2.Distance(Input.mousePosition, tmpPosition) > 100f && Time.timeScale != 0 && dController.pointer == 10) {
 
             isLookedAround = true;
             StartCoroutine(Close(0.3f));

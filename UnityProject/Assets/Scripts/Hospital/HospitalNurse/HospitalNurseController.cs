@@ -93,7 +93,8 @@ public class HospitalNurseController : MonoBehaviour
     private float cur_timeOfWandering, cur_timeOfAnxiousWandering, cur_timeOfLightWandering;
 
 
-    private float changable_timeOfCalming, changable_timeOfEasyCalming, changable_timeOfWandering, changable_timeOfLightWandering;
+    private float changable_timeOfCalming, changable_timeOfEasyCalming, 
+        changable_timeOfWandering, changable_timeOfLightWandering;
 
 
     private float timeOfPatheringAfterDisappear;
@@ -179,6 +180,7 @@ public class HospitalNurseController : MonoBehaviour
         influence_of_distance_on_Wander = 6f;
 
         changable_timeOfCalming = 7f;
+        changable_timeOfEasyCalming = 2f;
         changable_timeOfWandering = 3f;
         changable_timeOfLightWandering = 4f;
 
@@ -217,12 +219,14 @@ public class HospitalNurseController : MonoBehaviour
             isWandering = true;
             StartCoroutine(wander());
         }
-        if (isMarshallVisible && marshallController.isChasable && (isCalm || isWandering || isAnxious)) {
+        if (isMarshallVisible && marshallController.isChasable && (isCalm || isAnxious)) {
             isCalm = false; 
-            isWandering = false;
+         
             isAnxious = false;
 
             isNeedToRush = true;
+            marshallController.number_of_rushers++;
+            filling(1f);
             exclam();
         }
 
@@ -369,6 +373,21 @@ public class HospitalNurseController : MonoBehaviour
 
                 while (!isCameToTarget) {
                     wanderingTimer = time;
+
+                    if (isMarshallVisible)
+                    {
+                        isWanderingOnLight = false;
+
+                        isNeedToRush = true;
+                        exclam();
+
+
+                        hasEverNoticed = true;
+                        marshallController.number_of_rushers++;
+
+                        yield break;
+                    }
+
                     yield return null;
                 }
 
@@ -479,7 +498,7 @@ public class HospitalNurseController : MonoBehaviour
 
 
         isVeryAnxious = false;
-        filling(1f);
+        wanderingTimer = changable_timeOfEasyCalming;
         quest();
 
         isAnxious = true;

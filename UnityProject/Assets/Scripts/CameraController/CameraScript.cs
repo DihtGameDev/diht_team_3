@@ -60,4 +60,29 @@ public class CameraScript : MonoBehaviour
         }
 
     }
+
+    public IEnumerator Shake(float duration, float magnitude, float offset = 0f) {
+
+        yield return new WaitForSeconds(offset);
+        isRestricted = true;
+        Vector3 start_position = transform.localPosition;
+
+        float timer = 0f;
+
+        Debug.Log("Camera");
+        while (timer < duration) {
+            float x = Random.Range(-1f, 1f) * magnitude;
+
+
+            transform.localPosition = new Vector3(start_position.x + x, start_position.y, camera_Offset);
+
+            timer += Time.deltaTime;
+
+            yield return  null;
+        }
+
+        isRestricted = false;
+
+
+    }
 }

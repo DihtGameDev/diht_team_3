@@ -44,7 +44,7 @@ public class DialogeTriggerHospital2 : MonoBehaviour
     void Update()
     {
  
-        if (Input.GetKeyDown(Global.sitDown) && dController.pointer == 2) {
+        if (Input.GetKeyDown(Global.sitDown) && Time.timeScale != 0 && dController.pointer == 2) {
             
             StartCoroutine(Close(0.1f));
             StartCoroutine(comeBack());

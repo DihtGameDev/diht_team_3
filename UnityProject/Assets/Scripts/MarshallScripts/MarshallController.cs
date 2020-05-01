@@ -77,6 +77,7 @@ public class MarshallController : MonoBehaviour
 
     //AUDIO
     private AudioController audioController;
+
     IEnumerator walkSound;
     private bool change_audio = false;
     private bool change_audio_volume = false;
@@ -84,6 +85,9 @@ public class MarshallController : MonoBehaviour
     //LIGHTNING
     private GameObject needToBeLighted;
 
+    //CAMERA
+    [SerializeField]
+    private CameraScript cameraController;
     // Start is called before the first frame update
 
     private void Awake()
@@ -100,9 +104,9 @@ public class MarshallController : MonoBehaviour
 
         audioController = GameObject.Find("AudioManager").gameObject.GetComponent<AudioController>();
         walkSound = audioController.PlayWithPeriod("MarshallStep", 0.28f, true);
-        needToBeLighted = GameObject.Find("NeedToBeLighted").gameObject;    
+        needToBeLighted = GameObject.Find("NeedToBeLighted").gameObject;
 
-
+        cameraController = GameObject.FindObjectOfType<CameraScript>();
 
     }
 
@@ -179,6 +183,8 @@ public class MarshallController : MonoBehaviour
                 change_audio = true;
                 change_audio_volume = true;
                 audioController.StartChasingSound();
+                StartCoroutine(cameraController.Shake(0.3f, 0.12f, 0.1f));
+
                 isChasable = true;
             }
         }

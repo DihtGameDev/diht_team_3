@@ -19,7 +19,9 @@ public class DialogeController : MonoBehaviour
     public Text nameText;
     public Text dialogeText;
 
-    public Animator animator;
+
+    public RectTransform rec;
+
 
     [SerializeField]
     private List<string> sentences = new List<string>();
@@ -34,6 +36,8 @@ public class DialogeController : MonoBehaviour
     void Start()
     {
 
+        rec.anchoredPosition = new Vector2(0f, -rec.rect.height / 2f);
+
 
         mouseTrigger = FindObjectOfType<DialogeTriggerHospital1>();
 
@@ -43,7 +47,7 @@ public class DialogeController : MonoBehaviour
 
     void Update()
     {
-        animator.speed = 1f / Time.timeScale;
+       
         if ((Input.GetKeyDown(Global.action) || Input.GetKeyDown(KeyCode.Return)) && isTyping)
         {
             isStopTyping = true;
@@ -71,7 +75,8 @@ public class DialogeController : MonoBehaviour
         string sentence = sentences[index++];
         StartCoroutine(TypeSentence(sentence));
 
-        animator.SetBool("isOpen", true);
+        StartCoroutine(openPanel(210f));
+       
     }
 
     public IEnumerator CloseSentence(float offset, bool skipAllowed) {
@@ -95,7 +100,8 @@ public class DialogeController : MonoBehaviour
 
 
         isTypedAndShow = false;
-        animator.SetBool("isOpen", false);
+        StartCoroutine(closePanel(210f));
+
         pointer++;
 
     }
@@ -140,5 +146,43 @@ public class DialogeController : MonoBehaviour
         if (mouseTrigger != null)
         { mouseTrigger.tmpPosition = Input.mousePosition; }
         pointer++;
+    }
+
+    IEnumerator openPanel(float speed) {
+
+        rec.anchoredPosition = new Vector2(0f, -rec.rect.height / 2f);
+        float timer = 0f;
+        while (rec.anchoredPosition.y <= rec.rect.height / 2f)
+        {
+            timer += Time.deltaTime;
+            if (Time.timeScale == 0)
+            {
+                rec.anchoredPosition = new Vector2(0f, rec.anchoredPosition.y + Time.deltaTime * speed);
+            }
+            else
+            {
+                rec.anchoredPosition = new Vector2(0f, rec.anchoredPosition.y + Time.unscaledDeltaTime * speed);
+            }
+            yield return null;
+        }
+        Debug.Log(timer);
+
+    }
+    IEnumerator closePanel( float speed)
+    {
+        rec.anchoredPosition = new Vector2(0f, rec.rect.height / 2f);
+
+
+        while(rec.anchoredPosition.y >= -rec.rect.height / 2f)
+        {
+            if (Time.timeScale == 0)
+            {
+                rec.anchoredPosition = new Vector2(0f, rec.anchoredPosition.y - Time.deltaTime * speed);
+            }
+            else {
+                rec.anchoredPosition = new Vector2(0f, rec.anchoredPosition.y - Time.unscaledDeltaTime * speed);
+            }
+            yield return null;
+        }
     }
 }

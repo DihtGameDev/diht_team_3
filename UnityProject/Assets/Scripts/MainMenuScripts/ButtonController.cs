@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using UnityEngine.Playables;
+using UnityEngine.UI;
 
 public class ButtonController : MonoBehaviour
 {
@@ -22,16 +24,31 @@ public class ButtonController : MonoBehaviour
 
 
     [SerializeField]
-    private GameObject eventSystem;
+    private EventSystem eventSystem;
 
 
-  
+    //SETTINGS
+    public InterFaceController.CurrentKey currentKey = new InterFaceController.CurrentKey();
+
+    public Slider eff_volume, mus_volume, inter_volume;
+    //Resolution
+    public Dropdown resolutions;
+
+    
+    [HideInInspector]
+    public List<InterFaceController.Resolution> resolutionsList;
+
+
+
     void Start()
     {
       
 
         current = this.transform.GetChild(0).gameObject;
-        eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(current);
+
+
+        eventSystem = GameObject.FindGameObjectWithTag("EventSystem").gameObject.GetComponent<EventSystem>();
+        eventSystem.SetSelectedGameObject(current);
 
         starter = GameObject.Find("Starter").gameObject.GetComponent<PlayableDirector>();
         fader = GameObject.Find("Fader").gameObject.GetComponent<PlayableDirector>();
@@ -51,7 +68,43 @@ public class ButtonController : MonoBehaviour
 
 
         starter.Play();
-       
+
+
+        //SETTINGS
+        eff_volume.GetComponent<Slider>().value = Global.effects_volume;
+        mus_volume.GetComponent<Slider>().value = Global.music_volume;
+        inter_volume.GetComponent<Slider>().value = Global.interface_volume;
+
+        eff_volume.gameObject.SetActive(false);
+        mus_volume.gameObject.SetActive(false);
+        inter_volume.gameObject.SetActive(false);
+
+        //Resolution
+
+        resolutionsList = InterFaceController.resolutionsList;
+
+        for (int i = 1; i < resolutionsList.Count; i++)
+        {
+            if (Global.current_resolution.width == resolutionsList[i].width &&
+                Global.current_resolution.height == resolutionsList[i].height)
+            {
+                resolutionsList.Remove(resolutionsList[i]);
+                break;
+            }
+        }
+        List<string> options = new List<string>();
+        foreach (var res in resolutionsList)
+        {
+            options.Add(res.width.ToString() + " x " + res.height.ToString());
+        }
+        resolutions.GetComponent<Dropdown>().AddOptions(options);
+        
+        resolutions.gameObject.SetActive(false);
+
+
+
+
+
         #endregion
     }
 
@@ -60,13 +113,20 @@ public class ButtonController : MonoBehaviour
     {
         if (!isRestricted)
         {
-            if (eventSystem.GetComponent<EventSystem>().currentSelectedGameObject == null)
+            if (Input.GetKey(KeyCode.Return) && currentKey.meaning != null && current.name != "VideoMenu")
             {
-                eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(current);
+                currentKey.meaning.SetActive(false);
+                eventSystem.SetSelectedGameObject(currentKey.description);
+                currentKey.meaning = null;
             }
 
-            if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S) ||
-                Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow))
+            if (eventSystem.currentSelectedGameObject == null)
+            {
+                eventSystem.SetSelectedGameObject(current);
+            }
+
+            if ((Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.S) ||
+                Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow)) && currentKey.meaning == null)
             {
                 StartCoroutine(audioController.Play("SelectButton"));
 
@@ -76,10 +136,19 @@ public class ButtonController : MonoBehaviour
             {
                 StartCoroutine(audioController.Play("SelectButton"));
 
-                ComeBack();
+                if (currentKey.meaning != null)
+                {
+                    currentKey.meaning.SetActive(false);
+                    eventSystem.SetSelectedGameObject(currentKey.description);
+                    currentKey.meaning = null;
+                }
+                else { 
+                    ComeBack();
+                }
+
             }
 
-            if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+            if ((Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) && currentKey.meaning == null)
             {
                 StartCoroutine(audioController.Play("SelectButton"));
                 #region butIndexPlus
@@ -88,7 +157,7 @@ public class ButtonController : MonoBehaviour
                 #endregion
             }
 
-            if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
+            if ((Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) && currentKey.meaning == null)
             {
                 StartCoroutine(audioController.Play("SelectButton"));
                 #region butIndexMinus
@@ -104,8 +173,16 @@ public class ButtonController : MonoBehaviour
             current.SetActive(false);
             current = obj;
             current.SetActive(true);
-            eventSystem.GetComponent<EventSystem>().SetSelectedGameObject(current.transform.
-                GetChild(current.GetComponent<MenuLevel>().buttonIndex).gameObject);
+
+            if (obj.name != "AudioMenu" && obj.name != "VideoMenu")
+            {
+                eventSystem.SetSelectedGameObject(current.transform.
+                            GetChild(current.GetComponent<MenuLevel>().buttonIndex).gameObject);
+            }
+            else {
+                eventSystem.SetSelectedGameObject(current.transform.
+                           GetChild(current.GetComponent<MenuLevel>().buttonIndex).transform.GetChild(1).gameObject);
+            }
         }
     }
 
@@ -169,5 +246,53 @@ public class ButtonController : MonoBehaviour
     IEnumerator activate(float offset) {
         yield return new WaitForSecondsRealtime(offset);
         isRestricted = false;
+    }
+
+    //COSTILES from InterfaceController
+    public void changeControl(GameObject clicked)
+    {
+        currentKey.description = eventSystem.currentSelectedGameObject;
+        clicked.SetActive(true);
+        eventSystem.SetSelectedGameObject(clicked);
+        StartCoroutine(costile(clicked));
+    }
+    IEnumerator costile(GameObject clicked)
+    {
+        yield return new WaitForSecondsRealtime(0.1f);
+        currentKey.meaning = clicked;
+    }
+
+    public void changeEffectsVolume()
+    {
+        audioController.changeVolumeSettings("effects", eff_volume.GetComponent<Slider>().value);
+        Global.effects_volume = eff_volume.GetComponent<Slider>().value;
+        if (Time.timeSinceLevelLoad > 2f)
+        {
+            StartCoroutine(audioController.Play("Alarm"));
+        }
+    }
+
+    public void changeMusicVolume()
+    {
+        audioController.changeVolumeSettings("music", mus_volume.GetComponent<Slider>().value);
+        Global.music_volume = mus_volume.GetComponent<Slider>().value;
+    }
+
+    public void changeInterfaceVolume()
+    {
+        audioController.changeVolumeSettings("interface", inter_volume.GetComponent<Slider>().value);
+        Global.interface_volume = inter_volume.GetComponent<Slider>().value;
+        if (Time.timeSinceLevelLoad > 2f)
+        {
+            StartCoroutine(audioController.Play("Typing"));
+        }
+    }
+
+    //RESOLUTION
+    public void changeResolution(Int32 index)
+    {
+        Screen.SetResolution(resolutionsList[index].width, resolutionsList[index].height, true);
+        Global.current_resolution = new InterFaceController.Resolution(resolutionsList[index].width, resolutionsList[index].height);
+
     }
 }

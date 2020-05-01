@@ -100,7 +100,7 @@ public class DialogeTriggerHospital3 : MonoBehaviour
     {
         if (other.CompareTag("Marshall"))
         {
-            if (Input.GetKeyDown(Global.action) && dController.pointer == 2 && switcher.isAlloedToPress)
+            if (Input.GetKeyDown(Global.action) && Time.timeScale != 0 && dController.pointer == 2 && switcher.isAlloedToPress)
             {            
                 StartCoroutine(Display(0.0f));
                 StartCoroutine(attention(enemy, 2f, 0.3f));

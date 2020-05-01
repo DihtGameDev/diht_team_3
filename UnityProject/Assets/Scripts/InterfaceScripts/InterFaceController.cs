@@ -51,6 +51,7 @@ public class InterFaceController : MonoBehaviour
     public Slider camera_sensitivity, eff_volume, mus_volume, inter_volume;
     //Resolution
     public Dropdown resolutions;
+
     public class Resolution {
         public int width;
         public int height;
@@ -59,7 +60,8 @@ public class InterFaceController : MonoBehaviour
             height = h;
         }
     }
-    public List<Resolution> resolutionsList = new List<Resolution>() { Global.current_resolution, new Resolution(1920, 1080), new Resolution(1600, 900),
+    [HideInInspector]
+    public  static List<Resolution> resolutionsList = new List<Resolution>() { Global.current_resolution, new Resolution(3440, 1440), new Resolution(2880, 1800), new Resolution(2560, 1600), new Resolution(1920, 1080), new Resolution(1600, 900),
                new Resolution(1366, 768), new Resolution(1280, 760),new Resolution(1280, 720), new Resolution(1024, 768),new Resolution(800, 480)};
 
 
@@ -212,6 +214,7 @@ public class InterFaceController : MonoBehaviour
         panels.Pop().SetActive(false);
         panels.Clear();
         Time.timeScale = 1f;
+        Cursor.visible = true;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
         //AUDIO
@@ -223,6 +226,7 @@ public class InterFaceController : MonoBehaviour
         panels.Pop().SetActive(false);
         panels.Clear();
         Time.timeScale = 1f;
+        Cursor.visible = true;
 
         //AUDIO
         pauseSound(1f);
@@ -247,6 +251,7 @@ public class InterFaceController : MonoBehaviour
         panels.Peek().SetActive(true);
         eventSystem.SetSelectedGameObject(panels.Peek().transform.GetChild(0).gameObject);
         Time.timeScale = 0f;
+        Cursor.visible = false;
     }
 
      
@@ -255,6 +260,7 @@ public class InterFaceController : MonoBehaviour
         panels.Peek().SetActive(false);
         panels.Clear();
         Time.timeScale = 1f;
+        Cursor.visible = true;
 
         StartCoroutine(audioController.turnOffSound(buildIndex));
 

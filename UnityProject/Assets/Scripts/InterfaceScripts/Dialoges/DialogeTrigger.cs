@@ -238,7 +238,7 @@ public class DialogeTrigger : MonoBehaviour
             StartCoroutine(audioController.Stop("RoomAnxiety", 5f));
         }
 
-        if (Input.GetKeyDown(Global.moveRight) && dController.pointer == 70) {
+        if (Input.GetKeyDown(Global.moveRight) && Time.timeScale != 0 && dController.pointer == 70) {
             TriggerDialoge();
             StartCoroutine(Close(0.2f, false));
         }
@@ -248,7 +248,7 @@ public class DialogeTrigger : MonoBehaviour
             StartCoroutine(Display(0.5f));
             
         }
-        if (Input.GetKeyDown(Global.moveLeft) && dController.pointer == 74) {
+        if (Input.GetKeyDown(Global.moveLeft) && Time.timeScale != 0 && dController.pointer == 74) {
             TriggerDialoge();
             StartCoroutine(Close(0.2f, false));
             StartCoroutine(pointer.GetComponent<PointerController>().release(0.2f));
@@ -318,7 +318,7 @@ public class DialogeTrigger : MonoBehaviour
     }
     IEnumerator changeColor(float offset, Color color) {
         yield return new WaitForSecondsRealtime(offset);
-        dController.animator.GetComponent<Image>().color = color;
+        dController.rec.GetComponent<Image>().color = color;
 
     }
     IEnumerator furiating(float offset) {
