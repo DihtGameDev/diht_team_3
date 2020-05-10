@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - StartMenu
+  - PlayMenu
+  - Settings
+  - Interface
+  - Marshall
+  - HealthBar
+  - PauseMenu
+  - Link
+  - Location
+  - Obstacle
+  - Shelter
+  - EventSystem
+  - Floor
+  - Enemy
+  - Detecter
+  - Doctor
+  - Pointer
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - 
+  - Water
+  - UI
+  - 
+  - 
+  - FrontWall
+  - Player
+  - Floor
+  - BackWall
+  - Obstacle
+  - Shelter
+  - Enemy
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: BackRoom
+    uniqueID: 1361490015
+    locked: 0
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Back
+    uniqueID: 3383889753
+    locked: 0
+  - name: Panels
+    uniqueID: 1812384853
+    locked: 0
+  - name: Interface
+    uniqueID: 3014481503
+    locked: 0
+  - name: Marshal
+    uniqueID: 2767297461
+    locked: 0
+  - name: Room2
+    uniqueID: 57316409
+    locked: 0
+  - name: Fader
+    uniqueID: 3785243633
+    locked: 0
+  - name: BlueMoon
+    uniqueID: 2249512747
+    locked: 0
+  - name: EnemyAlarm
+    uniqueID: 537869909
+    locked: 0
