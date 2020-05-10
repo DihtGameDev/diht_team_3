@@ -62,11 +62,11 @@ public class HospitalNurseController : MonoBehaviour
     public LightTrigger lightTrigger = new LightTrigger(false);
 
 
+    public float wanderingTimer = 0f;
     [SerializeField]
     private bool isCalm; // враг спокоен
     [SerializeField]
     private bool isWanderingOnLight;
-    public float wanderingTimer = 0f;
     [SerializeField]
     private bool isWandering; //враг сейчас тебя заметит и есть время чтобы спрятаться
     [SerializeField]
@@ -77,6 +77,8 @@ public class HospitalNurseController : MonoBehaviour
     private bool isNeedToRush; // враг тебя видит и преследует
     [SerializeField]
     private bool isRunningToPoint; // враг тебя преследует, но не видит
+
+
 
     private bool hasEverNoticed; // замечал ли враг вообще
 
@@ -194,6 +196,7 @@ public class HospitalNurseController : MonoBehaviour
 
         cur_timeOfWandering = Vector2.Distance(transform.position, marshall.transform.position) * changable_timeOfWandering / influence_of_distance_on_Wander;
         cur_timeOfAnxiousWandering = cur_timeOfWandering / seriosnessOfAnxiety;
+        
         if (lightTrigger.isTriggerOnTheLight)
         {
             cur_timeOfLightWandering = Vector2.Distance(transform.position, lightTrigger.light.transform.position) * changable_timeOfLightWandering / influence_of_distance_on_Wander;
@@ -219,6 +222,7 @@ public class HospitalNurseController : MonoBehaviour
             isWandering = true;
             StartCoroutine(wander());
         }
+
         if (isMarshallVisible && marshallController.isChasable && (isCalm || isAnxious)) {
             isCalm = false; 
          
@@ -294,7 +298,7 @@ public class HospitalNurseController : MonoBehaviour
         {
             pathfinder.canSearch = true;
             isCameToTarget = false;
-            anim.SetBool("isMoving", true);
+
         }
 
         if (Vector2.Distance(marshall.transform.position, this.transform.position) < 0.6f)
@@ -308,7 +312,7 @@ public class HospitalNurseController : MonoBehaviour
         #region animation
 
 
-        anim.speed = pathfinder.velocity.magnitude/ walkSpeed;
+        anim.speed = pathfinder.velocity.magnitude / walkSpeed;
 
         if (pathfinder.velocity.x > 0.001f)
         {
@@ -358,6 +362,7 @@ public class HospitalNurseController : MonoBehaviour
                 StartCoroutine(wander());
                 yield break;
             }
+
             if (lightTrigger.isTriggerOnTheLight)
             {
                 StartCoroutine(glitch(0.21f));
@@ -367,6 +372,7 @@ public class HospitalNurseController : MonoBehaviour
 
                 target = new Vector2(lightTrigger.light.transform.position.x, lightTrigger.light.transform.position.y -
                     TriggerLogic.wallHigh);
+                
                 isCameToTarget = false;
                 wanderingTimer = time;
                 filling(1f);
@@ -390,7 +396,6 @@ public class HospitalNurseController : MonoBehaviour
 
                     yield return null;
                 }
-
 
             }
 
@@ -469,6 +474,7 @@ public class HospitalNurseController : MonoBehaviour
 
             yield return null;
         }
+
         isAnxious = false;
         filling(0f);
         isCalm = true;
@@ -564,6 +570,7 @@ public class HospitalNurseController : MonoBehaviour
         alarm2.sprite = exclamation;
         alarm3.sprite = exclamation;
     }
+
     public void quest()
     {
         alarm1.sprite = question;
@@ -571,6 +578,7 @@ public class HospitalNurseController : MonoBehaviour
         alarm3.sprite = question;
 
     }
+
     public void filling(float fill)
     {
         alarm1.material.SetFloat("_Fill", fill);

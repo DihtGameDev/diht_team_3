@@ -52,7 +52,7 @@ public class ButtonController : MonoBehaviour
 
         starter = GameObject.Find("Starter").gameObject.GetComponent<PlayableDirector>();
         fader = GameObject.Find("Fader").gameObject.GetComponent<PlayableDirector>();
-        blueMoonDirector = GameObject.Find("MaterialChange").gameObject.GetComponent<PlayableDirector>();
+        blueMoonDirector = GameObject.Find("Logo").gameObject.GetComponent<PlayableDirector>();
 
         #region startBuild
         Cursor.visible = false;

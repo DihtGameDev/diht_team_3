@@ -148,6 +148,7 @@ public class DialogeController : MonoBehaviour
         pointer++;
     }
 
+
     IEnumerator openPanel(float speed) {
 
         rec.anchoredPosition = new Vector2(0f, -rec.rect.height / 2f);
