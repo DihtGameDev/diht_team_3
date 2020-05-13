@@ -385,11 +385,11 @@ public class MarshallController : MonoBehaviour
     public IEnumerator glitch(float time)
     {
         StartCoroutine(audioController.Play("Alarm"));
-        sprite.material.SetVector("_Glitch", new Vector4(0f, 0.3f, 0f, 0f));
+        sprite.material.SetVector("_Glitch", new Vector2(0f, 0.3f));
         sprite.material.SetFloat("_GlitchOffset", 0.18f);
         yield return new WaitForSeconds(time);
         sprite.material.SetFloat("_GlitchOffset", -0.05f);
-        sprite.material.SetVector("_Glitch", new Vector4(0f, 0f, 0f, 0f));
+        sprite.material.SetVector("_Glitch", new Vector4(0f, 0f));
         sprite.material.SetFloat("_GlitchOffset", 0.15f);
     }
 

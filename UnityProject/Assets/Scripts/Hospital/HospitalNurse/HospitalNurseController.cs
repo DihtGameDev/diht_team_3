@@ -589,11 +589,11 @@ public class HospitalNurseController : MonoBehaviour
 
     IEnumerator glitch(float time) {
         StartCoroutine(audioController.Play("Alarm"));
-        enemySprite.material.SetVector("_Glitch", new Vector4(0f, 0.3f, 0f, 0f));
+        enemySprite.material.SetVector("_Glitch", new Vector2(0f, 0.3f));
         enemySprite.material.SetFloat("_GlitchOffset", 0.18f);
         yield return new WaitForSeconds(time);
         enemySprite.material.SetFloat("_GlitchOffset", -0.05f);
-        enemySprite.material.SetVector("_Glitch", new Vector4(0f, 0f, 0f, 0f));
+        enemySprite.material.SetVector("_Glitch", new Vector2(0f, 0f));
         enemySprite.material.SetFloat("_GlitchOffset", 0.15f);
     }
 }

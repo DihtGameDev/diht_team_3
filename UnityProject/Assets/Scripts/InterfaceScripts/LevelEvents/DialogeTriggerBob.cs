@@ -433,7 +433,7 @@ public class DialogeTriggerBob : MonoBehaviour
  
         choiceMenu.SetActive(true);
 
-        eventSystem.SetSelectedGameObject(choiceMenu.transform.GetChild(0).gameObject);
+        eventSystem.SetSelectedGameObject(choiceMenu.transform.GetChild(0).transform.GetChild(0).gameObject);
 
         Time.timeScale = 0f;
 
