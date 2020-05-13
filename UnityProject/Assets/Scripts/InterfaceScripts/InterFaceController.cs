@@ -22,6 +22,8 @@ public class InterFaceController : MonoBehaviour
     private GameObject loseMenu;
     [SerializeField]
     private GameObject selectMenu;
+    [SerializeField]
+    private GameObject choiceMenu;
 
     [SerializeField]
     private Stack<GameObject> panels = new Stack<GameObject>();
@@ -93,10 +95,13 @@ public class InterFaceController : MonoBehaviour
 
         selectMenu = transform.Find("SelectLevel").gameObject;
 
-       
+        choiceMenu = transform.Find("ChoiceMenu").gameObject;
+
+
         pauseMenu.SetActive(false);
         loseMenu.SetActive(false);
         selectMenu.SetActive(false);
+       
 
         marshall = GameObject.FindGameObjectWithTag("Marshall").gameObject;
         marshallController = marshall.GetComponent<MarshallController>();
@@ -345,11 +350,11 @@ public class InterFaceController : MonoBehaviour
                 KeyCode code = KeyCode.None;
                 if (e.isKey && !(e.keyCode == KeyCode.Return))
                 {
-                    currentKey.meaning.transform.FindChild("Text").GetComponent<Text>().text = e.keyCode.ToString();
+                    currentKey.meaning.transform.Find("Text").GetComponent<Text>().text = e.keyCode.ToString();
                     code = e.keyCode;
                 }
                 else if (isShift) {
-                    currentKey.meaning.transform.FindChild("Text").GetComponent<Text>().text = KeyCode.LeftShift.ToString();
+                    currentKey.meaning.transform.Find("Text").GetComponent<Text>().text = KeyCode.LeftShift.ToString();
                     code = KeyCode.LeftShift;
                 }
 
@@ -391,7 +396,8 @@ public class InterFaceController : MonoBehaviour
     }
 
     void pauseSound(float localVolume) {
-        if (SceneManager.GetActiveScene().buildIndex > 1)
+        
+        if (SceneManager.GetActiveScene().buildIndex > SceneUtility.GetBuildIndexByScenePath("Assets/Scenes/Room.unity"))
         {
             if (marshallController.isChasable)
             {
@@ -403,7 +409,7 @@ public class InterFaceController : MonoBehaviour
             
             }
         }
-        if (SceneManager.GetActiveScene().buildIndex == 1)
+        if (SceneManager.GetActiveScene().buildIndex == SceneUtility.GetBuildIndexByScenePath("Assets/Scenes/Room.unity"))
         {
             StartCoroutine(audioController.ChangeVolume("RoomAnxiety", audioController.GetClipRelevantVolume("RoomAnxiety") * localVolume));
         }

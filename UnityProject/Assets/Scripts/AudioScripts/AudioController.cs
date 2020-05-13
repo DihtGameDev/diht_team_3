@@ -85,13 +85,15 @@ public class AudioController : MonoBehaviour
 
     public void Update()
     {
-        if (SceneManager.GetActiveScene().buildIndex > 1 && !isPlayingBackTrack)
+        if (SceneManager.GetActiveScene().buildIndex > SceneUtility.GetBuildIndexByScenePath("Assets/Scenes/Room.unity") 
+            && SceneManager.GetActiveScene().buildIndex < SceneUtility.GetBuildIndexByScenePath("Assets/Scenes/Hospital5.unity") && !isPlayingBackTrack)
         {
             isPlayingBackTrack = true;
             StartCoroutine(Play("HospitalTrack", 2.5f, 3.5f));
         }
 
-        if (SceneManager.GetActiveScene().buildIndex <= 1 && isPlayingBackTrack)
+        if ((SceneManager.GetActiveScene().buildIndex <= SceneUtility.GetBuildIndexByScenePath("Assets/Scenes/Room.unity") 
+            || SceneManager.GetActiveScene().buildIndex >= SceneUtility.GetBuildIndexByScenePath("Assets/Scenes/Hospital5.unity")) && isPlayingBackTrack)
         {
             isPlayingBackTrack = false;
         }
@@ -301,23 +303,29 @@ public class AudioController : MonoBehaviour
             }
         }
         return null;
+
+        
     }
 
+    
     public IEnumerator turnOffSound(int buildIndex)
     {
-        if (buildIndex <= 1)
+        Debug.Log(buildIndex);
+        
+        if (buildIndex <= SceneUtility.GetBuildIndexByScenePath("Assets/Scenes/Room.unity") ||
+            buildIndex >= SceneUtility.GetBuildIndexByScenePath("Assets/Scenes/Hospital5.unity"))
         {
             StartCoroutine(Stop("HospitalTrack"));
             StartCoroutine(Stop("Tension"));
 
         }
-        if (buildIndex != 1)
+        if (buildIndex != SceneUtility.GetBuildIndexByScenePath("Assets/Scenes/Room.unity"))
         {
             StartCoroutine(Stop("RoomAnxiety"));
             StartCoroutine(Stop("NeonLamp"));
             StartCoroutine(Stop("BackGround"));
         }
-        if (buildIndex != 0) {
+        if (buildIndex != SceneUtility.GetBuildIndexByScenePath("Assets/Scenes/MainMenu.unity")) {
             StartCoroutine(Stop("MenuNeon"));
             StartCoroutine(Stop("BackGround"));
         }

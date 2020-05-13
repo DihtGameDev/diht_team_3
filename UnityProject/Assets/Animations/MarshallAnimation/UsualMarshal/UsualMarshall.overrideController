@@ -1,0 +1,15 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: UsualMarshall
+  m_Controller: {fileID: 9100000, guid: 4955d7df44db9a04aa8bc286abb30dd7, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: 9c6f72bc74548ad41b4951859db64935, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 2d763f4794e78ab498c4d80a264b1180, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 5c0a69dd1cd74bb49bd9bcc29d6fe54a, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 356b97f5d305d8d4fbbda54ffb479786, type: 2}

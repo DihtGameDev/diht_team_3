@@ -5,7 +5,7 @@ using UnityEngine;
 public class TriggerLogic : MonoBehaviour
 {
     public bool isProblemLight;
-    public static float wallHigh = 1.3f;
+    public static float wallHigh = 1f;
     public bool isTrigger = false;
 
     public float distanceOfTriggering;

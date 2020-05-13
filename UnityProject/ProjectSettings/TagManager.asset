@@ -58,6 +58,9 @@ TagManager:
   - name: BackRoom
     uniqueID: 1361490015
     locked: 0
+  - name: Door
+    uniqueID: 2075545501
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

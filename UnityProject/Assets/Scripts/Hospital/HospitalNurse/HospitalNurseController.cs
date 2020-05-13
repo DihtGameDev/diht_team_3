@@ -123,9 +123,9 @@ public class HospitalNurseController : MonoBehaviour
     {
         audioController = Global.audioController;
 
-        alarm1 = transform.FindChild("Alarm").transform.GetChild(0).GetComponent<SpriteRenderer>();
-        alarm2 = transform.FindChild("Alarm").transform.GetChild(1).GetComponent<SpriteRenderer>();
-        alarm3 = transform.FindChild("Alarm").transform.GetChild(2).GetComponent<SpriteRenderer>();
+        alarm1 = transform.Find("Alarm").transform.GetChild(0).GetComponent<SpriteRenderer>();
+        alarm2 = transform.Find("Alarm").transform.GetChild(1).GetComponent<SpriteRenderer>();
+        alarm3 = transform.Find("Alarm").transform.GetChild(2).GetComponent<SpriteRenderer>();
 
         alarm1.material.SetFloat("_Fill", 0.0f);
         alarm2.material.SetFloat("_Fill", 0.0f);
