@@ -41,8 +41,8 @@ Material:
     - _EdgeWidth: 0.005
     - _Fade: 1
     - _GlitchOffset: 0.16
-    - _GlitchScale: 177
-    - _GlitchTransparency: 0.309
+    - _GlitchScale: 182
+    - _GlitchTransparency: 0.26
     - _Scale: 23.2
     m_Colors:
     - Color_16198231: {r: 0.51785755, g: 0, b: 2, a: 1}
