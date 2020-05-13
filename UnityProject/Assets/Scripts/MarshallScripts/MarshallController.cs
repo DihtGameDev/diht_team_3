@@ -146,9 +146,9 @@ public class MarshallController : MonoBehaviour
         pointer = GameObject.FindGameObjectWithTag("Pointer");
         if (SceneManager.GetActiveScene().name == "Room") {
             this.gameObject.SetActive(false);
-        }        
-      
+        }
 
+        sprite.material.SetVector("_Glitch", new Vector4(0f, 0f));
     }
     // Update is called once per frame
     void FixedUpdate()

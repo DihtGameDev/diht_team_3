@@ -67,6 +67,8 @@ public class DialogeTrigger : MonoBehaviour
     
         dialoge.sentences[dialoge.sentences.Length - 2] = "Press " + Global.moveRight.ToString();
         dialoge.sentences[dialoge.sentences.Length - 1] = "Press " + Global.moveLeft.ToString();
+
+        doctor.transform.GetChild(0).GetComponent<SpriteRenderer>().material.SetVector("_Glitch", new Vector4(0f, 0f));
     }
 
     // Update is called once per frame
@@ -174,7 +176,7 @@ public class DialogeTrigger : MonoBehaviour
         {
             StartCoroutine(changeColor(0.39f, start_dialogue_color));
             StartCoroutine(Display(0.4f));
-            //StartCoroutine(furiating(0.65f));
+            StartCoroutine(furiating(0.65f));
         }
 
         if (dController.pointer == 46)

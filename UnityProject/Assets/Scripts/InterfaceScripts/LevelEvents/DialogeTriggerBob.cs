@@ -63,8 +63,10 @@ public class DialogeTriggerBob : MonoBehaviour
         TriggerDialoge();
 
         StartCoroutine(audioController.Play("RoomAnxiety", 3f));
-        
 
+        bob.transform.GetChild(0).GetComponent<SpriteRenderer>().material.SetVector("_Glitch", new Vector4(0f, 0f));
+        Debug.Log(bob.transform.GetChild(0).GetComponent<SpriteRenderer>().material.GetVector("_Glitch").y);
+        coolerMarshall.transform.GetChild(0).GetComponent<SpriteRenderer>().material.SetVector("_Glitch", new Vector4(0f, 0f));
     }
 
     // Update is called once per frame
@@ -109,7 +111,7 @@ public class DialogeTriggerBob : MonoBehaviour
         {
             StartCoroutine(changeColor(0.39f, start_dialogue_color));
             StartCoroutine(Display(0.4f)); // Да блятб..
-            //StartCoroutine(furiating(0.4f));
+            StartCoroutine(furiating(0.4f));
         }
         if (dController.pointer == 18)
         {
@@ -448,6 +450,6 @@ public class DialogeTriggerBob : MonoBehaviour
         exitTimeline.Play();
         StartCoroutine(audioController.Stop("RoomAnxiety", 2f, 2f));
         yield return new WaitForSecondsRealtime((float)exitTimeline.duration + 10f);
-        SceneManager.LoadScene(0);
+        Application.Quit();
     }
 }

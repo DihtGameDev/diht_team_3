@@ -188,6 +188,7 @@ public class HospitalNurseController : MonoBehaviour
 
         timeOfPatheringAfterDisappear = 1f;
 
+        enemySprite.material.SetVector("_Glitch", new Vector2(0f, 0f));
     }
 
     // Update is called once per frame
