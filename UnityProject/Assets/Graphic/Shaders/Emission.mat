@@ -30,4 +30,4 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats: []
     m_Colors:
-    - _Color: {r: 0, g: 0.00891598, b: 0.445799, a: 1}
+    - _Color: {r: 0, g: 1.064676, b: 0.05837931, a: 1}

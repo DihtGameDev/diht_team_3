@@ -30,8 +30,8 @@ public class MarshallController : MonoBehaviour
 
     [SerializeField]
     private float walkSpeed;
-    [SerializeField]
-    private float scriptMomentSpeed;
+
+    public float scriptMomentSpeed;
     [SerializeField]
     private float runSpeed;
     [SerializeField]

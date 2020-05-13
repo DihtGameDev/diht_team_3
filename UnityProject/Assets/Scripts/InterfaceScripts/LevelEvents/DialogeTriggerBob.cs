@@ -109,7 +109,7 @@ public class DialogeTriggerBob : MonoBehaviour
         {
             StartCoroutine(changeColor(0.39f, start_dialogue_color));
             StartCoroutine(Display(0.4f)); // Да блятб..
-            StartCoroutine(furiating(0.4f));
+            //StartCoroutine(furiating(0.4f));
         }
         if (dController.pointer == 18)
         {
@@ -447,7 +447,7 @@ public class DialogeTriggerBob : MonoBehaviour
         Time.timeScale = 1f;
         exitTimeline.Play();
         StartCoroutine(audioController.Stop("RoomAnxiety", 2f, 2f));
-        yield return new WaitForSecondsRealtime((float)exitTimeline.duration + 7f);
+        yield return new WaitForSecondsRealtime((float)exitTimeline.duration + 10f);
         SceneManager.LoadScene(0);
     }
 }

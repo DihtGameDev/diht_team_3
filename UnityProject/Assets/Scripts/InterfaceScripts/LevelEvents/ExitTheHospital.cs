@@ -11,18 +11,23 @@ public class ExitTheHospital : MonoBehaviour
     Vector2 start_position;
 
     public GameObject lightFromDoor;
+    private GameObject marshall;
+    private MarshallController marshallController;
     float intensivity;
 
     // Start is called before the first frame update
     void Start()
     {
+        marshall = GameObject.FindGameObjectWithTag("Marshall").gameObject;
+        marshallController = marshall.GetComponent<MarshallController>();
+
         intensivity = 0f;
         audioController = GameObject.Find("AudioManager").gameObject.GetComponent<AudioController>();
         start_position = transform.GetChild(0).position;
         target_position = start_position;
 
         lightFromDoor.GetComponent<Light2D>().intensity = 0f;
-        
+        marshallController.scriptMomentSpeed = 1.2f;   
     }
 
     // Update is called once per frame

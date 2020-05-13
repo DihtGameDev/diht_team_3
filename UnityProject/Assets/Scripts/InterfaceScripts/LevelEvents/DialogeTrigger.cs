@@ -174,7 +174,7 @@ public class DialogeTrigger : MonoBehaviour
         {
             StartCoroutine(changeColor(0.39f, start_dialogue_color));
             StartCoroutine(Display(0.4f));
-            StartCoroutine(furiating(0.65f));
+            //StartCoroutine(furiating(0.65f));
         }
 
         if (dController.pointer == 46)
