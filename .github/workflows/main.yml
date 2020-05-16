@@ -17,6 +17,7 @@ jobs:
         projectPath:
           - UnityProject
         unityVersion:
+          - 2019.3.10f1
           - 2019.3.13f1
         targetPlatform:
           - StandaloneOSX # Build a macOS standalone (Intel 64-bit).
@@ -41,5 +42,5 @@ jobs:
           targetPlatform: ${{ matrix.targetPlatform }}
       - uses: actions/upload-artifact@v1
         with:
-          name: Build
+          name: ${{ matrix.targetPlatform }}
           path: build
