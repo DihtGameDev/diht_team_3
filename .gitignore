@@ -83,3 +83,22 @@ UnityProject/sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 UnityProject/crashlytics-build.properties
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+
+UnityProject/.DS_Store
+UnityProject/.DS_Store?
+UnityProject/._*
+UnityProject/.Spotlight-V100
+UnityProject/.Trashes
+UnityProject/Icon?
+UnityProject/ehthumbs.db
+UnityProject/Thumbs.db
