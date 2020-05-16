@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class VisualDetecterController : MonoBehaviour
@@ -89,21 +90,14 @@ public class VisualDetecterController : MonoBehaviour
         distanceToMarshall = Vector2.Distance(view.points[0], view.points[1]);
 
         isMarshalOnSafeZone = false;
-        foreach (var shelter in shelters) {
-            if (shelter.Value.GetComponent<ShelterLogic>().information[name].isHided) {
-                isMarshalOnSafeZone = true;
-                break;
-            }
-        }
-
-        if (marshallController.isShined)
+        foreach (var shelter
+            in shelters.Where(shelter => shelter.Value.GetComponent<ShelterLogic>().information[name].isHided))
         {
-            calmDistanceOfViewing = calmDistShined;
+            isMarshalOnSafeZone = true;
+            break;
         }
-        else {
-            calmDistanceOfViewing = calmDistUnshined;
 
-        }
+        calmDistanceOfViewing = marshallController.isShined ? calmDistShined : calmDistUnshined;
 
         numberOfShelters = shelters.Count;
 

@@ -20,7 +20,7 @@ public class EventSensitiveScrollRect : MonoBehaviour
         {
             if (Input.GetButtonUp("Vertical"))
             {
-                Transform dropdownListTransform = dropdown.gameObject.transform.FindChild("Dropdown List");
+                Transform dropdownListTransform = dropdown.gameObject.transform.Find("Dropdown List");
                 if (dropdownListTransform == null)
                 {
                     // Show the dropdown when the user hits the arrow keys if the dropdown is not already showing

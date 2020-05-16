@@ -32,7 +32,7 @@ public class FacilityTriggerLogic : MonoBehaviour
     IEnumerator WaitAndFadeFacility(float time) {
 
 
-        facility.transform.FindChild("Enemies").gameObject.SetActive(false);
+        facility.transform.Find("Enemies").gameObject.SetActive(false);
         marshallController.number_of_rushers = 0; 
 
         facility_next.SetActive(true);

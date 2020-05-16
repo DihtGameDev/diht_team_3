@@ -345,11 +345,11 @@ public class InterFaceController : MonoBehaviour
                 KeyCode code = KeyCode.None;
                 if (e.isKey && !(e.keyCode == KeyCode.Return))
                 {
-                    currentKey.meaning.transform.FindChild("Text").GetComponent<Text>().text = e.keyCode.ToString();
+                    currentKey.meaning.transform.Find("Text").GetComponent<Text>().text = e.keyCode.ToString();
                     code = e.keyCode;
                 }
                 else if (isShift) {
-                    currentKey.meaning.transform.FindChild("Text").GetComponent<Text>().text = KeyCode.LeftShift.ToString();
+                    currentKey.meaning.transform.Find("Text").GetComponent<Text>().text = KeyCode.LeftShift.ToString();
                     code = KeyCode.LeftShift;
                 }
 

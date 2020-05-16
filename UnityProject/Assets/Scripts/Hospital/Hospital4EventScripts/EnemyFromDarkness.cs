@@ -26,7 +26,7 @@ public class EnemyFromDarkness : MonoBehaviour
             if (!isDone) {
                 isDone = true;
                 nurse.defaultTrajectory.Add(new Vector2(12.25f, 0.54f));
-                nurse._waitingOnDefaultPoint = 10f;
+                nurse.currentWaitingOnPoint = 10f;
 
             }
         }
