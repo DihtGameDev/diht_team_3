@@ -1,3 +1,4 @@
+
 # This .gitignore file should be placed at the root of your Unity project directory
 #
 # Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore
@@ -10,7 +11,6 @@
 [Ll]ogs/
 [Uu]ser[Ss]ettings/
 [Pp]roject[Ss]ettings/
-[Pp]ackages/
 
 UnityProject/[Ll]ibrary/
 UnityProject/[Tt]emp/
@@ -20,7 +20,6 @@ UnityProject/[Bb]uilds/
 UnityProject/[Ll]ogs/
 UnityProject/[Uu]ser[Ss]ettings/
 UnityProject/[Pp]roject[Ss]ettings/
-UnityProject/[Pp]ackages/
 
 
 # MemoryCaptures can get excessive in size.
@@ -29,7 +28,7 @@ UnityProject/[Pp]ackages/
 UnityProject/[Mm]emoryCaptures/
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
-*.meta
+# *.meta
 
 # Uncomment this line if you wish to ignore the asset store tools plugin
 # [Aa]ssets/AssetStoreTools*
