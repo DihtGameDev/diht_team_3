@@ -7,6 +7,7 @@ using UnityEngine.Experimental.Rendering.Universal;
 public class DoorScript : MonoBehaviour
 {
     private bool come = false;
+   
     public GameObject lightFromDoor;
     public Light2D globalLight;
     private float start_intensity_global;

@@ -25,7 +25,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 3b41d50d59978774d97d364bfa7575b5, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskTex:
@@ -33,7 +33,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 938a4c6541a45e74c9996aa5c4ccef9c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Texture2DAsset_1848BE33_Out_0:
+        m_Texture: {fileID: 2800000, guid: 3b41d50d59978774d97d364bfa7575b5, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Texture2DAsset_23E41DCD_Out_0:
@@ -41,10 +45,12 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - _DissolveScale: 50
     - _EdgeWidth: 0
     - _EnableExternalAlpha: 0
     - _Fade: 1
-    - _GlitchOffset: -0.042
+    - _GlitchOffset: -0.052
+    - _GlitchScale: 200
     - _GlitchTransparency: 0
     - _NoiseScale: 104
     - _Scale: 55
@@ -52,7 +58,7 @@ Material:
     - Color_16198231: {r: 0.227451, g: 0, b: 0.8773585, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
-    - _Glitch: {r: 0, g: 0.3, b: 0, a: 0}
+    - _Glitch: {r: 0, g: 0, b: 0, a: 0}
     - _GlitchColor: {r: 0.3529412, g: 0, b: 0.23921569, a: 0}
     - _GlitchPeriod: {r: 0, g: 20, b: 0, a: 0}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}

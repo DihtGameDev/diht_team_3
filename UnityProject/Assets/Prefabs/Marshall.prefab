@@ -116,13 +116,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d4089a3182476946b87ed3ecb988b5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isScript: 0
+  isMoving: 0
+  health: 0
+  isScript: 1
   isRestricted: 0
   marshal_height: 0
   isCaptured: 0
   isChasable: 0
   number_of_rushers: 0
-  diretion: {x: 0, y: 0}
+  direction: {x: 0, y: 0}
   walkSpeed: 0
   scriptMomentSpeed: 0
   runSpeed: 0
@@ -132,6 +134,7 @@ MonoBehaviour:
   isSitting: 0
   isShined: 0
   shinersCounter: 0
+  cameraController: {fileID: 0}
 --- !u!114 &2622858616077364561
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -303,7 +306,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 6
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 25ec9ba2c84f8df47b68953ac3d8ffbb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

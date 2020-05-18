@@ -31,7 +31,7 @@ public class PointerController : MonoBehaviour
     private Vector2 pos;
     void Awake()
     {
-        alignBeat = 1.7f;
+        alignBeat = 1.8f;
         comeArea = 0.5f;
 
         transformThis = this.GetComponent<RectTransform>();

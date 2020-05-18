@@ -5,7 +5,11 @@ using UnityEngine;
 
 public class TriggerLogic : MonoBehaviour
 {
-    public static float wallHigh = 1.3f;
+    public bool isProblemLight;
+    public static float wallHigh = 1f;
+    public bool isTrigger = false;
+
+    public float distanceOfTriggering;
 
     private CircleCollider2D awarenessCollier;
     private readonly HashSet<Collider2D> listeners = new HashSet<Collider2D>();

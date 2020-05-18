@@ -30,8 +30,8 @@ public class MarshallController : MonoBehaviour
 
     [SerializeField]
     private float walkSpeed;
-    [SerializeField]
-    private float scriptMomentSpeed;
+
+    public float scriptMomentSpeed;
     [SerializeField]
     private float runSpeed;
     [SerializeField]
@@ -146,9 +146,9 @@ public class MarshallController : MonoBehaviour
         pointer = GameObject.FindGameObjectWithTag("Pointer");
         if (SceneManager.GetActiveScene().name == "Room") {
             this.gameObject.SetActive(false);
-        }        
-      
+        }
 
+        sprite.material.SetVector("_Glitch", new Vector4(0f, 0f));
     }
     // Update is called once per frame
     void FixedUpdate()
@@ -248,6 +248,9 @@ public class MarshallController : MonoBehaviour
         else { downAxis = 0f; }
 
         direction = new Vector2(rightAxis + leftAxis, upAxis + downAxis);
+        if (isRestricted) {
+            direction = new Vector2(0f, 0f);
+        }
         if (!isRestricted)
         {
             move(direction);
@@ -273,12 +276,14 @@ public class MarshallController : MonoBehaviour
             anim.SetBool("isMoving", true);
 
         }
-
-        if (rightAxis + leftAxis > 0f)
+        if (!isRestricted)
         {
-            sprite.flipX = false;
+            if (rightAxis + leftAxis > 0f)
+            {
+                sprite.flipX = false;
+            }
+            else if (rightAxis + leftAxis < 0f) { sprite.flipX = true; }
         }
-        else if (rightAxis + leftAxis < 0f) { sprite.flipX = true; }
 
         if (direction.y == -1f && direction.x == 0f)
         {
@@ -360,10 +365,6 @@ public class MarshallController : MonoBehaviour
             {
                 Destroy(pointer.gameObject);
             }
-            if (SceneManager.GetActiveScene().name == "Room") {
-                StartCoroutine(audioController.Stop("BackGround", findAnimationClip(interFaceAnim.runtimeAnimatorController.animationClips, "FadeAway").length));
-                StartCoroutine(audioController.Stop("NeonLamp", findAnimationClip(interFaceAnim.runtimeAnimatorController.animationClips, "FadeAway").length));
-            }
             if (interFaceAnim != null)
             {
                 interFaceAnim.SetBool("isEnding", true);
@@ -377,17 +378,18 @@ public class MarshallController : MonoBehaviour
     IEnumerator Wait(float time)
     {
         yield return  new WaitForSecondsRealtime(2f);
+        StartCoroutine(audioController.turnOffSound(SceneManager.GetActiveScene().buildIndex + 1));
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
     public IEnumerator glitch(float time)
     {
         StartCoroutine(audioController.Play("Alarm"));
-        sprite.material.SetVector("_Glitch", new Vector4(0f, 0.3f, 0f, 0f));
+        sprite.material.SetVector("_Glitch", new Vector2(0f, 0.3f));
         sprite.material.SetFloat("_GlitchOffset", 0.18f);
         yield return new WaitForSeconds(time);
         sprite.material.SetFloat("_GlitchOffset", -0.05f);
-        sprite.material.SetVector("_Glitch", new Vector4(0f, 0f, 0f, 0f));
+        sprite.material.SetVector("_Glitch", new Vector4(0f, 0f));
         sprite.material.SetFloat("_GlitchOffset", 0.15f);
     }
 

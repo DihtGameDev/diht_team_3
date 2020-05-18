@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: a26fc5647a5620b44acb4ea61753d80c
   - enabled: 1
+    path: Assets/Scenes/Intro.unity
+    guid: 61af73c229f8e5a4a893ab25f3d2fd64
+  - enabled: 1
     path: Assets/Scenes/Room.unity
     guid: 1772104e9bc6fbc48b822295459c2016
   - enabled: 1
@@ -23,4 +26,13 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Hospital4.unity
     guid: 2b193bd3b84b7b54b8e07c5cf1bb75fb
+  - enabled: 1
+    path: Assets/Scenes/Hospital5.unity
+    guid: 334e3ac5a0ccb254584d4b550f6e89b8
+  - enabled: 1
+    path: Assets/Scenes/StreetAfterHospital.unity
+    guid: 65ade9c9296bf774bba58e98681d5be5
+  - enabled: 1
+    path: Assets/Scenes/BobOffice.unity
+    guid: f5410d158f5e66c45ba66c86832f495c
   m_configObjects: {}

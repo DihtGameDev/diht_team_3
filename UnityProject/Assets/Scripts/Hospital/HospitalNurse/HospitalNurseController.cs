@@ -141,6 +141,7 @@ public class HospitalNurseController : MonoBehaviour, ILightTriggerable
         speed = walkSpeed;
 
         maxTimeOfChasing = 10f;
+        enemySprite.material.SetVector("_Glitch", new Vector2(0f, 0f));
     }
 
     // Update is called once per frame
@@ -179,7 +180,7 @@ public class HospitalNurseController : MonoBehaviour, ILightTriggerable
         {
             pathfinder.canSearch = true;
             isCameToTarget = false;
-            anim.SetBool("isMoving", true);
+
         }
 
         if (Vector2.Distance(marshall.transform.position, transform.position) < 0.6f)
@@ -193,7 +194,7 @@ public class HospitalNurseController : MonoBehaviour, ILightTriggerable
         #region animation
 
 
-        anim.speed = pathfinder.velocity.magnitude/ walkSpeed;
+        anim.speed = pathfinder.velocity.magnitude / walkSpeed;
 
         if (pathfinder.velocity.x > 0.001f)
         {
@@ -226,7 +227,7 @@ public class HospitalNurseController : MonoBehaviour, ILightTriggerable
         alarm2.sprite = question;
         alarm3.sprite = question;
     }
-    
+
     public void filling(float fill)
     {
         alarm1.material.SetFloat("_Fill", fill);
@@ -236,11 +237,11 @@ public class HospitalNurseController : MonoBehaviour, ILightTriggerable
 
     public IEnumerator glitch(float time) {
         StartCoroutine(audioController.Play("Alarm"));
-        enemySprite.material.SetVector("_Glitch", new Vector4(0f, 0.3f, 0f, 0f));
+        enemySprite.material.SetVector("_Glitch", new Vector2(0f, 0.3f));
         enemySprite.material.SetFloat("_GlitchOffset", 0.18f);
         yield return new WaitForSeconds(time);
         enemySprite.material.SetFloat("_GlitchOffset", -0.05f);
-        enemySprite.material.SetVector("_Glitch", new Vector4(0f, 0f, 0f, 0f));
+        enemySprite.material.SetVector("_Glitch", new Vector2(0f, 0f));
         enemySprite.material.SetFloat("_GlitchOffset", 0.15f);
     }
 

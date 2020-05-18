@@ -39,11 +39,11 @@ public class ButtonController : MonoBehaviour
     public List<InterFaceController.Resolution> resolutionsList;
 
 
-
+    public Texture2D menuCursor;
+    public Texture2D gameCursor;
     void Start()
     {
       
-
         current = this.transform.GetChild(0).gameObject;
 
 
@@ -52,11 +52,11 @@ public class ButtonController : MonoBehaviour
 
         starter = GameObject.Find("Starter").gameObject.GetComponent<PlayableDirector>();
         fader = GameObject.Find("Fader").gameObject.GetComponent<PlayableDirector>();
-        blueMoonDirector = GameObject.Find("MaterialChange").gameObject.GetComponent<PlayableDirector>();
+        blueMoonDirector = GameObject.Find("Logo").gameObject.GetComponent<PlayableDirector>();
 
         #region startBuild
         Cursor.visible = false;
-
+        //Cursor.SetCursor(menuCursor, new Vector2(0f, 0f), CursorMode.Auto);
         //Activation
         StartCoroutine(activate(5f));
 
@@ -165,6 +165,8 @@ public class ButtonController : MonoBehaviour
                     (current.GetComponent<MenuLevel>().buttonIndex - 1 + current.transform.childCount) % current.transform.childCount;
                 #endregion
             }
+
+         
         }
     }
 
@@ -224,6 +226,8 @@ public class ButtonController : MonoBehaviour
     IEnumerator PlayGame(int buildIndex)
     {
         isRestricted = true;
+        Cursor.visible = false;
+        Cursor.SetCursor(gameCursor, new Vector2(0f, 0f), CursorMode.Auto);
         if (current.gameObject.name == "PlayMenu")
         {
             fader.Play();
@@ -246,6 +250,7 @@ public class ButtonController : MonoBehaviour
     IEnumerator activate(float offset) {
         yield return new WaitForSecondsRealtime(offset);
         isRestricted = false;
+        Cursor.visible = false;
     }
 
     //COSTILES from InterfaceController
