@@ -31,9 +31,13 @@ namespace Hospital.HospitalNurse
         {
             if (nurseController.isMarshallVisible)
             {
+                if (nurseController.marshallController.isBeingChased)
+                {
+                    nurseController.Annoyment = HospitalNurseController.RUSHING_TRESHHOLD;
+                }
                 if (nurseController.Annoyment < HospitalNurseController.RUSHING_TRESHHOLD)
                 {
-                    nurseController.Annoyment += (1f - Vector2.Distance(
+                    nurseController.Annoyment += (1.1f - Vector2.Distance(
                         nurseController.transform.position,
                         nurseController.marshall.transform.position
                     ) / nurseController.visualDetecter.distanceOfViewing) * 4f;
@@ -57,7 +61,7 @@ namespace Hospital.HospitalNurse
                 }
                 else
                 {
-                    nurseController.Annoyment -= 0.5f;
+                    nurseController.Annoyment -= 0.3f;
                 }
 
                 if (nurseController.target != destination)
@@ -74,7 +78,7 @@ namespace Hospital.HospitalNurse
                         nurseController.pointerOfDefMove++;
                     }
                 }
-                else
+                else if (nurseController.isCameToTarget)
                 {
                     nurseController.currentWaitingOnPoint += Time.deltaTime;
                 }

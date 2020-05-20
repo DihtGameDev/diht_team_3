@@ -85,7 +85,7 @@ public class HospitalNurseController : MonoBehaviour, ILightTriggerable
     public List<Vector2> defaultTrajectory = new List<Vector2>();
 
     public float waitingOnDefaultPoint = 1.0f;
-    public float waitingOnUndefaultPoint = 3.0f;
+    public float waitingOnUndefaultPoint = 2.0f;
     public int pointerOfDefMove = 0;
     [FormerlySerializedAs("_waitingOnDefaultPoint")] public float currentWaitingOnPoint = 0f;
 

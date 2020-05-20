@@ -399,7 +399,7 @@ public class InterFaceController : MonoBehaviour
         
         if (SceneManager.GetActiveScene().buildIndex > SceneUtility.GetBuildIndexByScenePath("Assets/Scenes/Room.unity"))
         {
-            if (marshallController.isChasable)
+            if (marshallController.isBeingChased)
             {
                 StartCoroutine(audioController.ChangeVolume("Tension", audioController.GetClipRelevantVolume("Tension") * localVolume));
 

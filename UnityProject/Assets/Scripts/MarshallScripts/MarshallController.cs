@@ -18,7 +18,7 @@ public class MarshallController : MonoBehaviour
     public float marshal_height;
     // Interaction With Enemies
     public bool isCaptured;
-    public bool isChasable;
+    public bool isBeingChased;
 
     public int number_of_rushers;
 
@@ -120,7 +120,7 @@ public class MarshallController : MonoBehaviour
         direction = Vector2.zero;
 
         isCaptured = false;
-        isChasable = false;
+        isBeingChased = false;
         number_of_rushers = 0;
         shinersCounter = 0;
 
@@ -168,24 +168,24 @@ public class MarshallController : MonoBehaviour
         //ENEMIES
         if (number_of_rushers == 0)
         {
-            if (isChasable)
+            if (isBeingChased)
             {
                 change_audio = true;
                 change_audio_volume = true;
                 audioController.StopChasingSound();
-                isChasable = false;
+                isBeingChased = false;
             }
         }
         else
         {
-            if (!isChasable)
+            if (!isBeingChased)
             {
                 change_audio = true;
                 change_audio_volume = true;
                 audioController.StartChasingSound();
                 StartCoroutine(cameraController.Shake(0.3f, 0.12f, 0.1f));
 
-                isChasable = true;
+                isBeingChased = true;
             }
         }
 
@@ -193,7 +193,7 @@ public class MarshallController : MonoBehaviour
 
         rb.velocity = Vector2.zero;
 
-        if (isChasable)
+        if (isBeingChased)
         {
             speed = (isSitting) ? fastCrawlSpeed : runSpeed;
         }
@@ -320,10 +320,10 @@ public class MarshallController : MonoBehaviour
             
             if (isSitting)
             {
-                StartCoroutine(audioController.ChangeVolume("MarshallStep", isChasable ? audioController.GetClipRelevantVolume("MarshallStep") * 0.7f : audioController.GetClipRelevantVolume("MarshallStep") * 0.5f));
+                StartCoroutine(audioController.ChangeVolume("MarshallStep", isBeingChased ? audioController.GetClipRelevantVolume("MarshallStep") * 0.7f : audioController.GetClipRelevantVolume("MarshallStep") * 0.5f));
             }
             else {
-                StartCoroutine(audioController.ChangeVolume("MarshallStep", isChasable ? audioController.GetClipRelevantVolume("MarshallStep") * 1.4f :
+                StartCoroutine(audioController.ChangeVolume("MarshallStep", isBeingChased ? audioController.GetClipRelevantVolume("MarshallStep") * 1.4f :
                     audioController.GetClipRelevantVolume("MarshallStep")));
             }
         }

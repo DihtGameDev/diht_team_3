@@ -24,9 +24,10 @@ public class TriggerLogic : MonoBehaviour
         var transformPosition = transform.position;
         foreach (var listener in listeners)
         {
-            var layers = LayerMask.GetMask("Default", "Enemy", "Obstacle");
+            var layers = LayerMask.GetMask("Nurse", "Obstacle");
             Vector2 diff = (listener.transform.position - transformPosition).normalized;
-            var hit = Physics2D.Raycast(transformPosition, diff, Mathf.Infinity, layers);
+            Debug.DrawRay(transformPosition, diff * 10f, Color.blue, 5f);
+            var hit = Physics2D.Raycast(transformPosition + transform.up, diff, Mathf.Infinity, layers);
             if (hit.collider != null && hit.collider.CompareTag("Enemy"))
             {
                 hit.transform.gameObject.GetComponent<HospitalNurseController>().OnTriggered(gameObject);
