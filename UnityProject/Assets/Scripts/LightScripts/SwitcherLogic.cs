@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 
@@ -18,6 +17,8 @@ public class SwitcherLogic : MonoBehaviour
     [SerializeField]
     LightController lightController;
 
+    private TriggerLogic nurseAwareTrigger;
+
     [SerializeField]
     SpriteRenderer renderer;
 
@@ -35,11 +36,11 @@ public class SwitcherLogic : MonoBehaviour
     // Start is called beforeihe first frame update
     void Start()
     {
-
         marshall = GameObject.FindGameObjectWithTag("Marshall").gameObject;
         marshallController = marshall.GetComponent<MarshallController>();
 
         lighter = transform.parent.Find("Light").GetComponent<Light2D>();
+        nurseAwareTrigger = lighter.transform.Find("NurseAwareTrigger").GetComponent<TriggerLogic>();
         lightController = transform.parent.Find("Light").GetComponent<LightController>();
 
         renderer = transform.Find("Sprite").GetComponent<SpriteRenderer>();
@@ -48,13 +49,11 @@ public class SwitcherLogic : MonoBehaviour
         start_intensity = lighter.intensity;
 
         audioController = GameObject.Find("AudioManager").gameObject.GetComponent<AudioController>();
-
     }
 
     // Update is called once per frame
     void Update()
     {
-
         if (Input.GetKeyDown(Global.action) && isOnClickArea && isAlloedToPress
             && !marshallController.isRestricted && Time.timeScale != 0f) {
             lightController.isShine = !lightController.isShine;
@@ -62,7 +61,7 @@ public class SwitcherLogic : MonoBehaviour
             StartCoroutine(audioController.Play("LightSwitch"));
             StartCoroutine(buttonChangeColor());
             lighter.intensity = lightController.isShine ? start_intensity : 0f;
-            lighter.gameObject.GetComponent<TriggerLogic>().isTrigger = true;
+            nurseAwareTrigger.TriggerEvent();
 
             if (isOnArea) {
                 if (lightController.isShine)
@@ -108,16 +107,13 @@ public class SwitcherLogic : MonoBehaviour
             yield return new WaitForSeconds(0.05f);
         }
         lighter.GetComponent<LightController>().isSignalizeToPlayer = false;
-
-    }
+     }
 
     IEnumerator buttonChangeColor()
     {
         renderer.color = startColor;
         yield return new WaitForSeconds(0.2f);
         renderer.color = triggerColor;
-
     }
-
-
+    
 }

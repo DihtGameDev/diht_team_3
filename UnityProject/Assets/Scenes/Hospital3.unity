@@ -121,6 +121,80 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &54515229
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 5563521129174417411}
+    m_Modifications:
+    - target: {fileID: 3446656129115014300, guid: 7364d7481702f461aa5028033bcde4b7,
+        type: 3}
+      propertyPath: m_Name
+      value: NurseAwareTrigger
+      objectReference: {fileID: 0}
+    - target: {fileID: 3446656129115014300, guid: 7364d7481702f461aa5028033bcde4b7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8178294268884388917, guid: 7364d7481702f461aa5028033bcde4b7,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8178294268884388917, guid: 7364d7481702f461aa5028033bcde4b7,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 8178294268884388917, guid: 7364d7481702f461aa5028033bcde4b7,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8178294268884388917, guid: 7364d7481702f461aa5028033bcde4b7,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8178294268884388917, guid: 7364d7481702f461aa5028033bcde4b7,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8178294268884388917, guid: 7364d7481702f461aa5028033bcde4b7,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8178294268884388917, guid: 7364d7481702f461aa5028033bcde4b7,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8178294268884388917, guid: 7364d7481702f461aa5028033bcde4b7,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8178294268884388917, guid: 7364d7481702f461aa5028033bcde4b7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8178294268884388917, guid: 7364d7481702f461aa5028033bcde4b7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8178294268884388917, guid: 7364d7481702f461aa5028033bcde4b7,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7364d7481702f461aa5028033bcde4b7, type: 3}
 --- !u!1 &256049094
 GameObject:
   m_ObjectHideFlags: 0
@@ -909,7 +983,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 766302936}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: LightClickable
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1618,7 +1692,7 @@ GameObject:
   - component: {fileID: 1292615349}
   - component: {fileID: 1292615350}
   - component: {fileID: 1292615351}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Switcher
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2614,7 +2688,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2010727894}
   - component: {fileID: 2010727895}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7765,7 +7839,7 @@ MonoBehaviour:
   isRestricted: 0
   marshal_height: 0
   isCaptured: 0
-  isChasable: 0
+  isBeingChased: 0
   number_of_rushers: 0
   direction: {x: 0, y: 0}
   walkSpeed: 0
@@ -8898,9 +8972,8 @@ GameObject:
   - component: {fileID: 5563521129174417410}
   - component: {fileID: 5563521129174417412}
   - component: {fileID: 5563521129174417409}
-  - component: {fileID: 5563521129174417413}
   - component: {fileID: 5563521129174417414}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8998,24 +9071,6 @@ MonoBehaviour:
   isSignalizeToPlayer: 0
   force_of_fading: 0.25
   frequency_of_fading: 1.5
---- !u!114 &5563521129174417413
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 2896566818303561604, guid: 0b7a4a8f9d6f4ad42b4912e6600e0a39,
-    type: 3}
-  m_PrefabInstance: {fileID: 7279845398376124289}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5563521129174417408}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6fc2c37f326974e4fa10032a6baaaaef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isProblemLight: 0
-  isTrigger: 0
-  distanceOfTriggering: 0
-  checkersStates: []
-  checker: {fileID: 7931572486411345845, guid: 8f881cada043c8d46ba7560d68f4bee0, type: 3}
 --- !u!50 &5563521129174417414
 Rigidbody2D:
   serializedVersion: 4
@@ -9113,7 +9168,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5906196471545444495}
   - component: {fileID: 5906196471545444494}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9195,7 +9250,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5906196471870418254}
   - component: {fileID: 5906196471870418253}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Point (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9380,7 +9435,7 @@ GameObject:
   - component: {fileID: 5906196472003493187}
   - component: {fileID: 5906196472003493213}
   - component: {fileID: 5906196472003493186}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: HospitalNurse (2)
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -9400,24 +9455,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   height: 0
+  marshall: {fileID: 0}
+  marshallController: {fileID: 0}
+  visualDetecter: {fileID: 0}
   question: {fileID: -5031942344191418343, guid: e7eb2241f60610c45b26fd7a39556db6,
     type: 3}
   exclamation: {fileID: -521983721737054179, guid: 7f3a996326a2ba84f920d2f07e86b45d,
     type: 3}
   isCameToTarget: 0
   target: {x: 15.83, y: 3.91}
-  wanderingTimer: 0
-  isCalm: 0
-  isWanderingOnLight: 0
-  isWandering: 0
-  isAnxious: 0
-  isVeryAnxious: 0
-  isNeedToRush: 0
-  isRunningToPoint: 0
+  speed: 0
+  walkSpeed: 0
+  runSpeed: 0
+  isMarshallVisible: 0
+  _annoyment: 0
+  lastDistractor: {fileID: 0}
   isLookingRight: 0
   defaultTrajectory: []
   waitingOnDefaultPoint: 1
-  _waitingOnDefaultPoint: 0
+  waitingOnUndefaultPoint: 3
+  pointerOfDefMove: 0
+  currentWaitingOnPoint: 0
   audioController: {fileID: 0}
 --- !u!1 &5906196472056642504
 GameObject:
@@ -9429,7 +9487,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5906196472056642505}
   - component: {fileID: 5906196472056642510}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Alarm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9514,7 +9572,7 @@ GameObject:
   - component: {fileID: 5906196472121759654}
   - component: {fileID: 5906196472121759652}
   - component: {fileID: 5906196472121759655}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: VisualDetecter
   m_TagString: Detecter
   m_Icon: {fileID: 0}
@@ -9590,7 +9648,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5906196472252967014}
   - component: {fileID: 5906196472252967015}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Point (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9736,7 +9794,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5906196472322528054}
   - component: {fileID: 5906196472322528053}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: EnemyRenderer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9818,7 +9876,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5906196472586182235}
   - component: {fileID: 5906196472586182234}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Point (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9895,7 +9953,7 @@ GameObject:
   - component: {fileID: 5906196472719483291}
   - component: {fileID: 5906196472719483289}
   - component: {fileID: 5906196472719483290}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: VisualDetecter
   m_TagString: Detecter
   m_Icon: {fileID: 0}
@@ -9979,7 +10037,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5906196472801414644}
   - component: {fileID: 5906196472801414643}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Alarm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10046,7 +10104,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5906196473054536971}
   - component: {fileID: 5906196473054536968}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: EnemyRenderer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10077,7 +10135,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5906196473225547442}
   - component: {fileID: 5906196473225547443}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Point
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10162,24 +10220,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   height: 0
+  marshall: {fileID: 0}
+  marshallController: {fileID: 0}
+  visualDetecter: {fileID: 0}
   question: {fileID: -5031942344191418343, guid: e7eb2241f60610c45b26fd7a39556db6,
     type: 3}
   exclamation: {fileID: -521983721737054179, guid: 7f3a996326a2ba84f920d2f07e86b45d,
     type: 3}
   isCameToTarget: 0
   target: {x: 0, y: 0}
-  wanderingTimer: 0
-  isCalm: 0
-  isWanderingOnLight: 0
-  isWandering: 0
-  isAnxious: 0
-  isVeryAnxious: 0
-  isNeedToRush: 0
-  isRunningToPoint: 0
+  speed: 0
+  walkSpeed: 0
+  runSpeed: 0
+  isMarshallVisible: 0
+  _annoyment: 0
+  lastDistractor: {fileID: 0}
   isLookingRight: 1
   defaultTrajectory: []
   waitingOnDefaultPoint: 1
-  _waitingOnDefaultPoint: 0
+  waitingOnUndefaultPoint: 3
+  pointerOfDefMove: 0
+  currentWaitingOnPoint: 0
   audioController: {fileID: 0}
 --- !u!1 &5906196473406114657
 GameObject:
@@ -10197,7 +10258,7 @@ GameObject:
   - component: {fileID: 5906196473406114686}
   - component: {fileID: 5906196473406114656}
   - component: {fileID: 5906196473406114687}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: HospitalNurse (3)
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -10427,7 +10488,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5906196473554918259}
   - component: {fileID: 5906196473554918256}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Point (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10729,6 +10790,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Light
       objectReference: {fileID: 0}
+    - target: {fileID: 2896566818303561601, guid: 0b7a4a8f9d6f4ad42b4912e6600e0a39,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2896566818303561602, guid: 0b7a4a8f9d6f4ad42b4912e6600e0a39,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -10789,7 +10855,8 @@ PrefabInstance:
       propertyPath: m_Intensity
       value: 1.3
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: 0b7a4a8f9d6f4ad42b4912e6600e0a39, type: 3}
 --- !u!1 &8364310156721038823
 GameObject:

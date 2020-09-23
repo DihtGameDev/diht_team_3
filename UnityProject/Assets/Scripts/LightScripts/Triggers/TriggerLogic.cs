@@ -1,5 +1,6 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using Hospital.HospitalNurse;
 using UnityEngine;
 
 public class TriggerLogic : MonoBehaviour
@@ -10,49 +11,41 @@ public class TriggerLogic : MonoBehaviour
 
     public float distanceOfTriggering;
 
+    private CircleCollider2D awarenessCollier;
+    private readonly HashSet<Collider2D> listeners = new HashSet<Collider2D>();
 
-    public List<GameObject> checkersStates = new List<GameObject>();
-
-    public GameObject checker;
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        distanceOfTriggering = 8f;
-
-        StartCoroutine(findEnemies(2f));
-
+        awarenessCollier = GetComponent<CircleCollider2D>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void TriggerEvent()
     {
-        if (isTrigger) {
-            isTrigger = false;
-            foreach (var checker in checkersStates)
+        var transformPosition = transform.position;
+        foreach (var listener in listeners)
+        {
+            var layers = LayerMask.GetMask("Nurse", "Obstacle");
+            Vector2 diff = (listener.transform.position - transformPosition).normalized;
+            Debug.DrawRay(transformPosition, diff * 10f, Color.blue, 5f);
+            var hit = Physics2D.Raycast(transformPosition + transform.up, diff, Mathf.Infinity, layers);
+            if (hit.collider != null && hit.collider.CompareTag("Enemy"))
             {
-                if (checker.GetComponent<Checker>().targetIsObserving) {
-                    checker.GetComponent<Checker>().target.
-                        GetComponent<HospitalNurseController>().lightTrigger.isTriggerOnTheLight = true;
-                    checker.GetComponent<Checker>().target.
-                        GetComponent<HospitalNurseController>().lightTrigger.light = transform.gameObject;
-                }
+                hit.transform.gameObject.GetComponent<HospitalNurseController>().OnTriggered(gameObject);
             }
         }
     }
 
-    IEnumerator findEnemies(float offset) {
-        yield return new WaitForSecondsRealtime(offset);
-
-        foreach (var enemy in GameObject.FindGameObjectsWithTag("Enemy"))
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Enemy"))
         {
-            GameObject newObj = Instantiate(checker,
-            new Vector2(transform.position.x, transform.position.y - wallHigh), Quaternion.identity);
-            newObj.AddComponent<Checker>();
-            newObj.GetComponent<Checker>().target = enemy;
-            newObj.GetComponent<Checker>().parent = this.gameObject;
-            checkersStates.Add(newObj);
-
+            Debug.Log(other.name);
+            listeners.Add(other);
         }
     }
-
+    
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        listeners.Remove(other);
+    }
 }
